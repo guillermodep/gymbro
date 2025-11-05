@@ -22,35 +22,37 @@ const Pricing = () => {
       popular: false
     },
     {
-      name: 'Pase Mensual',
-      price: '160',
+      name: 'GymBro Pass',
+      price: '30',
       period: 'por mes',
-      description: 'Ideal para entrenar regularmente',
+      description: '¡Acceso ilimitado a TODOS los gimnasios!',
       features: [
-        'Todo del pase diario',
-        'Ahorra 20% vs pase diario',
+        'Acceso ilimitado a todos los GymBros',
+        'Reservas ilimitadas',
+        'Sin costo adicional por clase',
         'Prioridad en reservas',
         'Acceso a clases exclusivas',
-        'Soporte prioritario'
+        'Cancela cuando quieras'
       ],
-      cta: 'Comenzar ahora',
+      cta: 'Obtener GymBro Pass',
       link: '/usuario/registro',
-      popular: true
+      popular: true,
+      badge: 'Mejor Valor'
     },
     {
-      name: 'Para Gimnasios',
-      price: '5%',
-      period: 'por reserva',
-      description: 'Crece tu negocio con nosotros',
+      name: 'Pase Individual',
+      price: '160',
+      period: 'por mes',
+      description: 'Membresía a un gimnasio específico',
       features: [
-        'Gratis los primeros 3 meses',
-        'Dashboard completo',
-        'Sin costo de setup',
-        'Soporte dedicado',
-        'Reportes en tiempo real'
+        'Acceso a 1 gimnasio',
+        'Ahorra 20% vs pase diario',
+        'Reservas ilimitadas en ese gym',
+        'Acceso a todas sus clases',
+        'Soporte prioritario'
       ],
-      cta: 'Registrar gimnasio',
-      link: '/gimnasio/registro',
+      cta: 'Elegir gimnasio',
+      link: '/usuario/explorar',
       popular: false
     }
   ]
@@ -91,7 +93,7 @@ const Pricing = () => {
                 {plan.popular && (
                   <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
                     <span className="bg-primary text-dark px-4 py-1 rounded-full text-sm font-bold">
-                      Más Popular
+                      {plan.badge || 'Más Popular'}
                     </span>
                   </div>
                 )}

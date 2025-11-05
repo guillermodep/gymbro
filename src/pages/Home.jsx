@@ -267,6 +267,46 @@ const Home = () => {
         </div>
       </section>
 
+      {/* GymBro Pass Promo */}
+      <section className="py-20 bg-zinc-950">
+        <div className="container-custom">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            className="card bg-gradient-to-r from-primary/20 to-primary/5 border-primary text-center py-16"
+          >
+            <Star className="w-16 h-16 text-primary mx-auto mb-6" />
+            <h2 className="text-4xl md:text-5xl font-montserrat font-bold mb-6">
+              GymBro Pass
+            </h2>
+            <p className="text-2xl text-zinc-300 mb-4 max-w-2xl mx-auto">
+              Acceso ilimitado a <span className="text-primary font-bold">TODOS</span> los gimnasios
+            </p>
+            <div className="text-5xl font-montserrat font-bold text-primary mb-8">
+              $30<span className="text-2xl text-zinc-400">/mes</span>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
+              <div className="flex items-center space-x-2 text-zinc-300">
+                <Star className="w-5 h-5 text-primary" />
+                <span>150+ gimnasios</span>
+              </div>
+              <div className="flex items-center space-x-2 text-zinc-300">
+                <Star className="w-5 h-5 text-primary" />
+                <span>Reservas ilimitadas</span>
+              </div>
+              <div className="flex items-center space-x-2 text-zinc-300">
+                <Star className="w-5 h-5 text-primary" />
+                <span>Sin costo adicional</span>
+              </div>
+            </div>
+            <Link to="/precios" className="btn-primary text-lg px-8 py-4 inline-block">
+              Ver planes
+            </Link>
+          </motion.div>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="py-20">
         <div className="container-custom">

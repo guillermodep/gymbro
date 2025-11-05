@@ -13,7 +13,9 @@ const UserProfile = () => {
     name: 'Juan Pérez',
     email: 'juan@email.com',
     memberSince: '2024-01-15',
-    totalBookings: 24
+    totalBookings: 24,
+    hasGymBroPass: false, // Cambiar a true para simular que tiene el pass
+    gymBroPassExpiry: '2024-12-15'
   }
 
   // Mock bookings
@@ -55,6 +57,7 @@ const UserProfile = () => {
 
   const tabs = [
     { id: 'bookings', label: 'Mis Reservas', icon: Calendar },
+    { id: 'membership', label: 'Mi Membresía', icon: CreditCard },
     { id: 'history', label: 'Historial', icon: History },
     { id: 'profile', label: 'Mi Perfil', icon: User },
   ]
@@ -121,6 +124,154 @@ const UserProfile = () => {
 
             {/* Main Content */}
             <div className="lg:col-span-3">
+              {/* Membership Tab */}
+              {activeTab === 'membership' && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="space-y-6"
+                >
+                  {user.hasGymBroPass ? (
+                    <>
+                      {/* Active GymBro Pass */}
+                      <div className="card bg-gradient-to-r from-primary/20 to-primary/5 border-primary">
+                        <div className="flex items-start justify-between mb-6">
+                          <div>
+                            <div className="flex items-center space-x-2 mb-2">
+                              <Star className="w-6 h-6 text-primary fill-primary" />
+                              <h2 className="text-2xl font-montserrat font-bold">
+                                GymBro Pass Activo
+                              </h2>
+                            </div>
+                            <p className="text-zinc-300">
+                              Acceso ilimitado a todos los gimnasios
+                            </p>
+                          </div>
+                          <div className="text-right">
+                            <div className="text-3xl font-montserrat font-bold text-primary">
+                              $30
+                            </div>
+                            <div className="text-sm text-zinc-400">por mes</div>
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                          <div className="bg-dark/50 rounded-lg p-4">
+                            <div className="text-sm text-zinc-400 mb-1">Próximo pago</div>
+                            <div className="text-lg font-bold text-light">{user.gymBroPassExpiry}</div>
+                          </div>
+                          <div className="bg-dark/50 rounded-lg p-4">
+                            <div className="text-sm text-zinc-400 mb-1">Reservas este mes</div>
+                            <div className="text-lg font-bold text-light">{user.totalBookings}</div>
+                          </div>
+                          <div className="bg-dark/50 rounded-lg p-4">
+                            <div className="text-sm text-zinc-400 mb-1">Ahorro estimado</div>
+                            <div className="text-lg font-bold text-green-500">$162</div>
+                          </div>
+                        </div>
+
+                        <div className="flex space-x-3">
+                          <button className="btn-secondary flex-1">
+                            Cancelar membresía
+                          </button>
+                          <button className="btn-primary flex-1">
+                            Actualizar pago
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Benefits */}
+                      <div className="card">
+                        <h3 className="text-xl font-montserrat font-bold mb-4">
+                          Beneficios de tu GymBro Pass
+                        </h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {[
+                            'Acceso ilimitado a todos los gimnasios',
+                            'Reservas ilimitadas sin costo adicional',
+                            'Prioridad en reservas',
+                            'Acceso a clases exclusivas',
+                            'Sin cargos por cancelación',
+                            'Soporte prioritario 24/7'
+                          ].map((benefit, index) => (
+                            <div key={index} className="flex items-center space-x-3">
+                              <Star className="w-5 h-5 text-primary flex-shrink-0" />
+                              <span className="text-zinc-300">{benefit}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      {/* No GymBro Pass - Promotion */}
+                      <div className="card bg-gradient-to-r from-primary/20 to-primary/5 border-primary/30">
+                        <div className="text-center py-8">
+                          <Star className="w-16 h-16 text-primary mx-auto mb-4" />
+                          <h2 className="text-3xl font-montserrat font-bold mb-4">
+                            Obtén el GymBro Pass
+                          </h2>
+                          <p className="text-xl text-zinc-300 mb-6 max-w-2xl mx-auto">
+                            Acceso ilimitado a todos los gimnasios por solo $30/mes
+                          </p>
+                          
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 max-w-3xl mx-auto">
+                            <div className="bg-dark/50 rounded-lg p-4">
+                              <div className="text-3xl font-bold text-primary mb-2">150+</div>
+                              <div className="text-sm text-zinc-400">Gimnasios disponibles</div>
+                            </div>
+                            <div className="bg-dark/50 rounded-lg p-4">
+                              <div className="text-3xl font-bold text-primary mb-2">∞</div>
+                              <div className="text-sm text-zinc-400">Reservas ilimitadas</div>
+                            </div>
+                            <div className="bg-dark/50 rounded-lg p-4">
+                              <div className="text-3xl font-bold text-primary mb-2">$0</div>
+                              <div className="text-sm text-zinc-400">Costo por reserva</div>
+                            </div>
+                          </div>
+
+                          <a href="/precios" className="btn-primary text-lg px-8 py-4 inline-block">
+                            Ver planes y suscribirme
+                          </a>
+                        </div>
+                      </div>
+
+                      {/* Current Usage */}
+                      <div className="card">
+                        <h3 className="text-xl font-montserrat font-bold mb-4">
+                          Tu uso actual
+                        </h3>
+                        <div className="bg-zinc-800 rounded-lg p-6">
+                          <div className="flex items-center justify-between mb-4">
+                            <div>
+                              <div className="text-sm text-zinc-400 mb-1">Gasto este mes</div>
+                              <div className="text-3xl font-bold text-light">$192</div>
+                            </div>
+                            <div className="text-right">
+                              <div className="text-sm text-zinc-400 mb-1">Reservas</div>
+                              <div className="text-3xl font-bold text-light">{user.totalBookings}</div>
+                            </div>
+                          </div>
+                          <div className="bg-primary/10 border border-primary/30 rounded-lg p-4">
+                            <div className="flex items-center justify-between">
+                              <div>
+                                <div className="text-sm font-bold text-primary mb-1">
+                                  💡 Podrías ahorrar
+                                </div>
+                                <div className="text-xs text-zinc-300">
+                                  Con GymBro Pass ahorrarías $162 este mes
+                                </div>
+                              </div>
+                              <div className="text-2xl font-bold text-primary">$162</div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </motion.div>
+              )}
+
               {/* Bookings Tab */}
               {activeTab === 'bookings' && (
                 <motion.div
