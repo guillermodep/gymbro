@@ -30,7 +30,7 @@ const Home = () => {
             </h1>
             <p className="text-xl md:text-2xl text-zinc-300 mb-8 font-opensans">
               Encuentra, reserva y entrena en los mejores gimnasios cerca de ti.
-              Sin contratos, sin compromisos.
+              Olvídate de pagar por meses o años. Ahora todo es más flexible: sin contratos, sin compromisos.
             </p>
 
 
