@@ -76,35 +76,13 @@ const BookingModal = ({ isOpen, onClose, gym }) => {
                     <label className="block text-sm font-semibold text-light mb-3">
                       Tipo de Pase
                     </label>
-                    <div className="grid grid-cols-2 gap-3">
-                      <button
-                        type="button"
-                        onClick={() => setSelectedPass('daily')}
-                        className={`p-4 rounded-lg border-2 transition-all ${
-                          selectedPass === 'daily'
-                            ? 'border-primary bg-primary/10'
-                            : 'border-zinc-700 hover:border-zinc-600'
-                        }`}
-                      >
+                    <div className="grid grid-cols-1 gap-3">
+                      <div className="p-4 rounded-lg border-2 border-primary bg-primary/10">
                         <div className="text-center">
                           <div className="text-2xl font-bold text-primary">${gym.price}</div>
                           <div className="text-sm text-zinc-400">Pase Diario</div>
                         </div>
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setSelectedPass('monthly')}
-                        className={`p-4 rounded-lg border-2 transition-all ${
-                          selectedPass === 'monthly'
-                            ? 'border-primary bg-primary/10'
-                            : 'border-zinc-700 hover:border-zinc-600'
-                        }`}
-                      >
-                        <div className="text-center">
-                          <div className="text-2xl font-bold text-primary">${gym.price * 20}</div>
-                          <div className="text-sm text-zinc-400">Pase Individual</div>
-                        </div>
-                      </button>
+                      </div>
                     </div>
                     
                     {/* GymBro Pass Promo */}
@@ -183,7 +161,7 @@ const BookingModal = ({ isOpen, onClose, gym }) => {
                     <div className="flex justify-between items-center">
                       <span className="text-zinc-400">Total:</span>
                       <span className="text-2xl font-bold text-primary">
-                        ${selectedPass === 'daily' ? gym.price : gym.price * 20}
+                        ${gym.price}
                       </span>
                     </div>
                   </div>
