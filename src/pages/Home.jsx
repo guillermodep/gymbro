@@ -28,10 +28,35 @@ const Home = () => {
               Tu <span className="text-gradient">gimnasio ideal</span>
               <br />está a un click
             </h1>
-            <p className="text-xl md:text-2xl text-zinc-300 mb-12 font-opensans">
+            <p className="text-xl md:text-2xl text-zinc-300 mb-8 font-opensans">
               Encuentra, reserva y entrena en los mejores gimnasios cerca de ti.
               Sin contratos, sin compromisos.
             </p>
+
+            {/* GymBro Pass Highlight */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+              className="bg-gradient-to-r from-primary/30 via-primary/20 to-primary/30 border-2 border-primary rounded-2xl p-6 mb-8 max-w-2xl mx-auto"
+            >
+              <div className="flex items-center justify-center space-x-2 mb-2">
+                <Star className="w-6 h-6 text-primary fill-primary animate-pulse" />
+                <span className="text-sm font-bold text-primary uppercase tracking-wider">
+                  Oferta Especial
+                </span>
+                <Star className="w-6 h-6 text-primary fill-primary animate-pulse" />
+              </div>
+              <h2 className="text-2xl md:text-3xl font-montserrat font-bold text-light mb-2">
+                GymBro Pass: <span className="text-primary">$30/mes</span>
+              </h2>
+              <p className="text-zinc-300 mb-4">
+                Acceso ilimitado a +150 gimnasios. Entrena donde quieras, cuando quieras.
+              </p>
+              <Link to="/precios" className="btn-primary inline-block">
+                Ver Planes
+              </Link>
+            </motion.div>
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -267,42 +292,123 @@ const Home = () => {
         </div>
       </section>
 
-      {/* GymBro Pass Promo */}
-      <section className="py-20 bg-zinc-950">
-        <div className="container-custom">
+      {/* GymBro Pass Promo - DESTACADO */}
+      <section className="py-20 bg-zinc-950 relative overflow-hidden">
+        {/* Background effects */}
+        <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-primary/5" />
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
+        
+        <div className="container-custom relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <div className="inline-flex items-center space-x-2 bg-primary/20 border border-primary rounded-full px-6 py-2 mb-6">
+              <Star className="w-5 h-5 text-primary fill-primary animate-pulse" />
+              <span className="text-sm font-bold text-primary uppercase tracking-wider">
+                El Plan Más Popular
+              </span>
+              <Star className="w-5 h-5 text-primary fill-primary animate-pulse" />
+            </div>
+            <h2 className="text-5xl md:text-7xl font-montserrat font-extrabold mb-4">
+              <span className="text-gradient">GymBro Pass</span>
+            </h2>
+            <p className="text-2xl md:text-3xl text-zinc-300 mb-2">
+              Acceso ilimitado a <span className="text-primary font-bold">TODOS</span> los gimnasios
+            </p>
+          </motion.div>
+
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="card bg-gradient-to-r from-primary/20 to-primary/5 border-primary text-center py-16"
+            className="card bg-gradient-to-br from-primary/20 via-primary/10 to-primary/5 border-2 border-primary text-center py-16 max-w-5xl mx-auto"
           >
-            <Star className="w-16 h-16 text-primary mx-auto mb-6" />
-            <h2 className="text-4xl md:text-5xl font-montserrat font-bold mb-6">
-              GymBro Pass
-            </h2>
-            <p className="text-2xl text-zinc-300 mb-4 max-w-2xl mx-auto">
-              Acceso ilimitado a <span className="text-primary font-bold">TODOS</span> los gimnasios
-            </p>
-            <div className="text-5xl font-montserrat font-bold text-primary mb-8">
-              $30<span className="text-2xl text-zinc-400">/mes</span>
+            {/* Price */}
+            <div className="mb-12">
+              <div className="text-7xl md:text-8xl font-montserrat font-extrabold text-primary mb-4">
+                $30
+              </div>
+              <div className="text-2xl text-zinc-400 font-semibold">por mes</div>
+              <div className="text-sm text-zinc-500 mt-2">Cancela cuando quieras</div>
             </div>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-              <div className="flex items-center space-x-2 text-zinc-300">
-                <Star className="w-5 h-5 text-primary" />
-                <span>150+ gimnasios</span>
-              </div>
-              <div className="flex items-center space-x-2 text-zinc-300">
-                <Star className="w-5 h-5 text-primary" />
-                <span>Reservas ilimitadas</span>
-              </div>
-              <div className="flex items-center space-x-2 text-zinc-300">
-                <Star className="w-5 h-5 text-primary" />
-                <span>Sin costo adicional</span>
+
+            {/* Features Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 max-w-4xl mx-auto">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.1 }}
+                className="bg-dark/50 rounded-xl p-6 border border-primary/30"
+              >
+                <div className="text-4xl font-bold text-primary mb-2">150+</div>
+                <div className="text-zinc-300 font-semibold">Gimnasios</div>
+                <div className="text-sm text-zinc-500 mt-1">En toda la ciudad</div>
+              </motion.div>
+              
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2 }}
+                className="bg-dark/50 rounded-xl p-6 border border-primary/30"
+              >
+                <div className="text-4xl font-bold text-primary mb-2">∞</div>
+                <div className="text-zinc-300 font-semibold">Reservas</div>
+                <div className="text-sm text-zinc-500 mt-1">Sin límites</div>
+              </motion.div>
+              
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.3 }}
+                className="bg-dark/50 rounded-xl p-6 border border-primary/30"
+              >
+                <div className="text-4xl font-bold text-primary mb-2">$0</div>
+                <div className="text-zinc-300 font-semibold">Por Clase</div>
+                <div className="text-sm text-zinc-500 mt-1">Todo incluido</div>
+              </motion.div>
+            </div>
+
+            {/* Benefits List */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12 max-w-3xl mx-auto text-left">
+              {[
+                'Acceso ilimitado a todos los gimnasios',
+                'Reservas sin costo adicional',
+                'Prioridad en reservas populares',
+                'Acceso a clases exclusivas',
+                'Sin cargos por cancelación',
+                'Ahorra hasta 80% vs pases diarios'
+              ].map((benefit, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.1 * index }}
+                  className="flex items-center space-x-3"
+                >
+                  <div className="bg-primary rounded-full p-1">
+                    <Star className="w-4 h-4 text-dark fill-dark" />
+                  </div>
+                  <span className="text-zinc-200 font-medium">{benefit}</span>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* CTA */}
+            <div className="space-y-4">
+              <Link to="/usuario/registro" className="btn-primary text-xl px-12 py-5 inline-block">
+                Comenzar Ahora
+              </Link>
+              <div className="text-sm text-zinc-400">
+                Únete a 5,000+ usuarios que ya entrenan con GymBro Pass
               </div>
             </div>
-            <Link to="/precios" className="btn-primary text-lg px-8 py-4 inline-block">
-              Ver planes
-            </Link>
           </motion.div>
         </div>
       </section>

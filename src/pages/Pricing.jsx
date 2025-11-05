@@ -8,14 +8,15 @@ const Pricing = () => {
   const plans = [
     {
       name: 'Pase Diario',
-      price: '8',
+      price: '4-8',
       period: 'por día',
       description: 'Perfecto para probar diferentes gimnasios',
       features: [
         'Acceso a cualquier gimnasio',
         'Sin compromiso',
         'Cancelación gratis 24h antes',
-        'Reserva en minutos'
+        'Reserva en minutos',
+        'Paga solo cuando entrenas'
       ],
       cta: 'Explorar gimnasios',
       link: '/usuario/explorar',
@@ -27,33 +28,18 @@ const Pricing = () => {
       period: 'por mes',
       description: '¡Acceso ilimitado a TODOS los gimnasios!',
       features: [
-        'Acceso ilimitado a todos los GymBros',
+        'Acceso ilimitado a +150 gimnasios',
         'Reservas ilimitadas',
         'Sin costo adicional por clase',
         'Prioridad en reservas',
         'Acceso a clases exclusivas',
-        'Cancela cuando quieras'
+        'Cancela cuando quieras',
+        'Ahorra hasta 80% vs pases diarios'
       ],
       cta: 'Obtener GymBro Pass',
       link: '/usuario/registro',
       popular: true,
-      badge: 'Mejor Valor'
-    },
-    {
-      name: 'Pase Individual',
-      price: '160',
-      period: 'por mes',
-      description: 'Membresía a un gimnasio específico',
-      features: [
-        'Acceso a 1 gimnasio',
-        'Ahorra 20% vs pase diario',
-        'Reservas ilimitadas en ese gym',
-        'Acceso a todas sus clases',
-        'Soporte prioritario'
-      ],
-      cta: 'Elegir gimnasio',
-      link: '/usuario/explorar',
-      popular: false
+      badge: 'Más Popular'
     }
   ]
 
@@ -79,7 +65,7 @@ const Pricing = () => {
           </motion.div>
 
           {/* Pricing Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             {plans.map((plan, index) => (
               <motion.div
                 key={index}
