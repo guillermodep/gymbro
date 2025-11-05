@@ -33,30 +33,6 @@ const Home = () => {
               Sin contratos, sin compromisos.
             </p>
 
-            {/* GymBro Pass Highlight */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              className="bg-gradient-to-r from-primary/30 via-primary/20 to-primary/30 border-2 border-primary rounded-2xl p-6 mb-8 max-w-2xl mx-auto"
-            >
-              <div className="flex items-center justify-center space-x-2 mb-2">
-                <Star className="w-6 h-6 text-primary fill-primary animate-pulse" />
-                <span className="text-sm font-bold text-primary uppercase tracking-wider">
-                  Oferta Especial
-                </span>
-                <Star className="w-6 h-6 text-primary fill-primary animate-pulse" />
-              </div>
-              <h2 className="text-2xl md:text-3xl font-montserrat font-bold text-light mb-2">
-                GymBro Pass: <span className="text-primary">$30/mes</span>
-              </h2>
-              <p className="text-zinc-300 mb-4">
-                Acceso ilimitado a +150 gimnasios. Entrena donde quieras, cuando quieras.
-              </p>
-              <Link to="/precios" className="btn-primary inline-block">
-                Ver Planes
-              </Link>
-            </motion.div>
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">

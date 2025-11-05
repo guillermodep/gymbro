@@ -7,18 +7,35 @@ import Footer from '../components/Footer'
 const Pricing = () => {
   const plans = [
     {
-      name: 'Pase Diario',
-      price: '4-8',
+      name: 'Pase Básico',
+      price: '4',
       period: 'por día',
-      description: 'Perfecto para probar diferentes gimnasios',
+      description: 'Gimnasios comunes con servicios esenciales',
       features: [
-        'Acceso a cualquier gimnasio',
+        'Acceso a gimnasios básicos',
+        'Equipamiento estándar',
         'Sin compromiso',
         'Cancelación gratis 24h antes',
-        'Reserva en minutos',
         'Paga solo cuando entrenas'
       ],
-      cta: 'Explorar gimnasios',
+      cta: 'Ver gimnasios básicos',
+      link: '/usuario/explorar',
+      popular: false
+    },
+    {
+      name: 'Pase Premium',
+      price: '8',
+      period: 'por día',
+      description: 'Gimnasios destacados con servicios premium',
+      features: [
+        'Acceso a gimnasios destacados',
+        'Equipamiento de última generación',
+        'Clases especializadas',
+        'Entrenadores certificados',
+        'Amenidades premium',
+        'Cancelación gratis 24h antes'
+      ],
+      cta: 'Ver gimnasios premium',
       link: '/usuario/explorar',
       popular: false
     },
@@ -29,11 +46,11 @@ const Pricing = () => {
       description: '¡Acceso ilimitado a TODOS los gimnasios!',
       features: [
         'Acceso ilimitado a +150 gimnasios',
+        'Básicos y Premium incluidos',
         'Reservas ilimitadas',
         'Sin costo adicional por clase',
         'Prioridad en reservas',
         'Acceso a clases exclusivas',
-        'Cancela cuando quieras',
         'Ahorra hasta 80% vs pases diarios'
       ],
       cta: 'Obtener GymBro Pass',
@@ -65,7 +82,7 @@ const Pricing = () => {
           </motion.div>
 
           {/* Pricing Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {plans.map((plan, index) => (
               <motion.div
                 key={index}
