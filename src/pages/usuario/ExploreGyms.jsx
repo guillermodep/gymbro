@@ -4,6 +4,7 @@ import { Search, MapPin, Filter, Grid, Map as MapIcon } from 'lucide-react'
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
 import GymCard from '../../components/GymCard'
+import MapView from '../../components/MapView'
 import { mockGyms } from '../../data/mockData'
 
 const ExploreGyms = () => {
@@ -146,7 +147,7 @@ const ExploreGyms = () => {
             </p>
           </div>
 
-          {/* Gyms Grid */}
+          {/* Gyms Grid or Map */}
           {viewMode === 'grid' ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {filteredGyms.map((gym) => (
@@ -154,17 +155,7 @@ const ExploreGyms = () => {
               ))}
             </div>
           ) : (
-            <div className="card">
-              <div className="bg-zinc-800 rounded-lg h-[600px] flex items-center justify-center">
-                <div className="text-center">
-                  <MapIcon className="w-16 h-16 text-primary mx-auto mb-4" />
-                  <p className="text-zinc-400 mb-2">Vista de mapa</p>
-                  <p className="text-sm text-zinc-500">
-                    Integración con Google Maps próximamente
-                  </p>
-                </div>
-              </div>
-            </div>
+            <MapView gyms={filteredGyms} />
           )}
 
           {/* No Results */}
