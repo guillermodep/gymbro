@@ -2,6 +2,21 @@ export const mockGyms = [
   // GIMNASIOS PREMIUM (Destacados) - $8+
   {
     id: 1,
+    name: 'McKenzies Fitness Studio',
+    location: 'Reina Victoria 2649, Quito 170135',
+    rating: 4.9,
+    price: 12,
+    capacity: 30,
+    schedule: '5:00 - 23:00',
+    image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800',
+    featured: true,
+    activities: ['Musculación', 'CrossFit', 'Funcional', 'Spinning', 'Yoga', 'Pilates'],
+    description: 'Gimnasio premium con instalaciones de lujo en el corazón de Quito. Equipamiento de última generación, entrenadores certificados y ambiente exclusivo. Reconocido como uno de los mejores gimnasios de la ciudad.',
+    amenities: ['Duchas', 'Lockers', 'WiFi', 'Estacionamiento', 'Nutricionista', 'Sauna', 'Jacuzzi', 'Spa', 'Cafetería', 'Entrenador Personal'],
+    coordinates: { lat: -0.1807, lng: -78.4678 }
+  },
+  {
+    id: 2,
     name: 'PowerFit Studio',
     location: 'La Carolina, Quito',
     rating: 4.8,
@@ -13,10 +28,10 @@ export const mockGyms = [
     activities: ['CrossFit', 'Funcional', 'Yoga'],
     description: 'Gimnasio boutique especializado en entrenamiento funcional y CrossFit. Equipamiento de última generación y entrenadores certificados.',
     amenities: ['Duchas', 'Lockers', 'WiFi', 'Estacionamiento', 'Nutricionista', 'Sauna'],
-    coordinates: { lat: -0.1807, lng: -78.4678 }
+    coordinates: { lat: -0.1820, lng: -78.4690 }
   },
   {
-    id: 2,
+    id: 3,
     name: 'Iron Temple',
     location: 'González Suárez, Quito',
     rating: 4.9,
@@ -31,7 +46,7 @@ export const mockGyms = [
     coordinates: { lat: -0.1950, lng: -78.4850 }
   },
   {
-    id: 3,
+    id: 4,
     name: 'Elite Performance',
     location: 'La Carolina, Quito',
     rating: 4.9,
@@ -46,7 +61,7 @@ export const mockGyms = [
     coordinates: { lat: -0.1820, lng: -78.4690 }
   },
   {
-    id: 4,
+    id: 5,
     name: 'Platinum Gym',
     location: 'Cumbayá, Quito',
     rating: 4.8,
@@ -61,7 +76,7 @@ export const mockGyms = [
     coordinates: { lat: -0.2040, lng: -78.4390 }
   },
   {
-    id: 5,
+    id: 6,
     name: 'Titan Fitness Club',
     location: 'Iñaquito, Quito',
     rating: 4.7,
@@ -76,7 +91,7 @@ export const mockGyms = [
     coordinates: { lat: -0.1760, lng: -78.4810 }
   },
   {
-    id: 6,
+    id: 7,
     name: 'Oxygen Wellness',
     location: 'La Pradera, Quito',
     rating: 4.8,
@@ -93,7 +108,7 @@ export const mockGyms = [
 
   // GIMNASIOS INTERMEDIOS - $5-7
   {
-    id: 7,
+    id: 8,
     name: 'Urban Fitness',
     location: 'Cumbayá, Quito',
     rating: 4.6,
@@ -108,7 +123,7 @@ export const mockGyms = [
     coordinates: { lat: -0.2034, lng: -78.4384 }
   },
   {
-    id: 8,
+    id: 9,
     name: 'Warrior Gym',
     location: 'Iñaquito, Quito',
     rating: 4.7,
@@ -123,7 +138,7 @@ export const mockGyms = [
     coordinates: { lat: -0.1750, lng: -78.4800 }
   },
   {
-    id: 9,
+    id: 10,
     name: 'Body Shape',
     location: 'La Floresta, Quito',
     rating: 4.5,
@@ -138,7 +153,7 @@ export const mockGyms = [
     coordinates: { lat: -0.1860, lng: -78.4910 }
   },
   {
-    id: 10,
+    id: 11,
     name: 'Energy Gym',
     location: 'El Batán, Quito',
     rating: 4.4,
@@ -155,7 +170,7 @@ export const mockGyms = [
 
   // GIMNASIOS BÁSICOS - $4
   {
-    id: 11,
+    id: 12,
     name: 'Flex Zone',
     location: 'La Floresta, Quito',
     rating: 4.5,
@@ -170,7 +185,7 @@ export const mockGyms = [
     coordinates: { lat: -0.1850, lng: -78.4900 }
   },
   {
-    id: 12,
+    id: 13,
     name: 'Fit Center',
     location: 'San Rafael, Quito',
     rating: 4.3,
@@ -185,7 +200,7 @@ export const mockGyms = [
     coordinates: { lat: -0.1700, lng: -78.4600 }
   },
   {
-    id: 13,
+    id: 14,
     name: 'Active Life',
     location: 'La Gasca, Quito',
     rating: 4.4,
@@ -200,7 +215,7 @@ export const mockGyms = [
     coordinates: { lat: -0.1780, lng: -78.4880 }
   },
   {
-    id: 14,
+    id: 15,
     name: 'Gym Express',
     location: 'La Mariscal, Quito',
     rating: 4.2,
@@ -215,7 +230,7 @@ export const mockGyms = [
     coordinates: { lat: -0.1900, lng: -78.4850 }
   },
   {
-    id: 15,
+    id: 16,
     name: 'Fitness Point',
     location: 'El Inca, Quito',
     rating: 4.3,
