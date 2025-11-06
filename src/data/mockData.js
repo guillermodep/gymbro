@@ -8,7 +8,7 @@ export const mockGyms = [
     price: 12,
     capacity: 30,
     schedule: '5:00 - 23:00',
-    image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800',
+    image: 'https://lh3.googleusercontent.com/p/AF1QipP9ULI_s-BKvRNS42fMnoycaHn14sU7BM3G_XZQ=s1360-w1360-h1020-rw?w=800',
     featured: true,
     activities: ['Musculación', 'CrossFit', 'Funcional', 'Spinning', 'Yoga', 'Pilates'],
     description: 'Gimnasio premium con instalaciones de lujo en el corazón de Quito. Equipamiento de última generación, entrenadores certificados y ambiente exclusivo. Reconocido como uno de los mejores gimnasios de la ciudad.',
