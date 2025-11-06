@@ -1,11 +1,13 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Calendar, Users, DollarSign, TrendingUp, Clock, CheckCircle, X } from 'lucide-react'
+import { Calendar, Users, DollarSign, TrendingUp, Clock, CheckCircle, X, QrCode } from 'lucide-react'
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
+import QRScannerModal from '../../components/QRScannerModal'
 
 const GymDashboard = () => {
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0])
+  const [showQRScanner, setShowQRScanner] = useState(false)
 
   // Mock data
   const stats = [
@@ -42,12 +44,23 @@ const GymDashboard = () => {
             animate={{ opacity: 1, y: 0 }}
             className="mb-8"
           >
-            <h1 className="text-4xl md:text-5xl font-montserrat font-bold mb-4">
-              Dashboard
-            </h1>
-            <p className="text-xl text-zinc-400">
-              Bienvenido de vuelta, PowerFit Studio
-            </p>
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+              <div>
+                <h1 className="text-4xl md:text-5xl font-montserrat font-bold mb-4">
+                  Dashboard
+                </h1>
+                <p className="text-xl text-zinc-400">
+                  Bienvenido de vuelta, PowerFit Studio
+                </p>
+              </div>
+              <button
+                onClick={() => setShowQRScanner(true)}
+                className="btn-primary text-lg px-6 py-4 flex items-center justify-center space-x-2 w-full md:w-auto"
+              >
+                <QrCode className="w-6 h-6" />
+                <span>Escanear QR</span>
+              </button>
+            </div>
           </motion.div>
 
           {/* Stats Grid */}
@@ -186,6 +199,12 @@ const GymDashboard = () => {
       </div>
 
       <Footer />
+
+      {/* QR Scanner Modal */}
+      <QRScannerModal 
+        isOpen={showQRScanner} 
+        onClose={() => setShowQRScanner(false)} 
+      />
     </div>
   )
 }
