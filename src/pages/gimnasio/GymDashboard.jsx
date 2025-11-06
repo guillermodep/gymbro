@@ -14,7 +14,7 @@ const GymDashboard = () => {
   // Mock data
   const stats = [
     { icon: Users, label: 'Reservas Hoy', value: '24', change: '+12%', color: 'text-primary' },
-    { icon: DollarSign, label: 'Ingresos del Mes', value: '$2,450', change: '+18%', color: 'text-green-500' },
+    { icon: DollarSign, label: 'Ingresos del Mes', value: '$3,135', change: '+18%', color: 'text-green-500' },
     { icon: Calendar, label: 'Ocupación', value: '78%', change: '+5%', color: 'text-blue-500' },
     { icon: TrendingUp, label: 'Calificación', value: '4.8', change: '+0.2', color: 'text-yellow-500' }
   ]
