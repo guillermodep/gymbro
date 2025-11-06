@@ -4,10 +4,12 @@ import { Calendar, Users, DollarSign, TrendingUp, Clock, CheckCircle, X, QrCode 
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
 import QRScannerModal from '../../components/QRScannerModal'
+import RevenueModal from '../../components/RevenueModal'
 
 const GymDashboard = () => {
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0])
   const [showQRScanner, setShowQRScanner] = useState(false)
+  const [showRevenueModal, setShowRevenueModal] = useState(false)
 
   // Mock data
   const stats = [
@@ -71,7 +73,8 @@ const GymDashboard = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className="card"
+                className={`card ${stat.label === 'Ingresos del Mes' ? 'cursor-pointer hover:scale-105 transition-transform' : ''}`}
+                onClick={() => stat.label === 'Ingresos del Mes' && setShowRevenueModal(true)}
               >
                 <div className="flex items-center justify-between mb-4">
                   <div className={`p-3 rounded-lg bg-zinc-800`}>
@@ -204,6 +207,12 @@ const GymDashboard = () => {
       <QRScannerModal 
         isOpen={showQRScanner} 
         onClose={() => setShowQRScanner(false)} 
+      />
+
+      {/* Revenue Modal */}
+      <RevenueModal 
+        isOpen={showRevenueModal} 
+        onClose={() => setShowRevenueModal(false)} 
       />
     </div>
   )
