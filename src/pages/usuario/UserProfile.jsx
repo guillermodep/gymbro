@@ -1,22 +1,63 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { User, Calendar, CreditCard, History, Star, MapPin, Clock } from 'lucide-react'
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
+import Loader from '../../components/Loader'
+import { useAuth } from '../../contexts/AuthContext'
+import { supabase } from '../../lib/supabase'
 import { mockGyms } from '../../data/mockData'
 
 const UserProfile = () => {
   const [activeTab, setActiveTab] = useState('bookings')
+  const [userData, setUserData] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const { user: authUser } = useAuth()
 
-  // Mock user data
-  const user = {
-    name: 'Juan Pérez',
-    email: 'juan@email.com',
-    memberSince: '2024-01-15',
-    totalBookings: 24,
-    hasGymBroPass: false, // Cambiar a true para simular que tiene el pass
-    gymBroPassExpiry: '2024-12-15'
-  }
+  // Fetch user data from Supabase
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (!authUser) {
+        setLoading(false)
+        return
+      }
+
+      try {
+        // Fetch user from public.users
+        const { data, error } = await supabase
+          .from('users')
+          .select('*')
+          .eq('id', authUser.id)
+          .single()
+
+        if (error) throw error
+
+        setUserData({
+          name: data.name || authUser.user_metadata?.name || 'Usuario',
+          email: data.email || authUser.email,
+          memberSince: data.created_at?.split('T')[0] || '2024-01-15',
+          totalBookings: 0, // TODO: Count from bookings table
+          hasGymBroPass: false, // TODO: Check from memberships table
+          gymBroPassExpiry: null
+        })
+      } catch (err) {
+        console.error('Error fetching user data:', err)
+        // Fallback to auth user data
+        setUserData({
+          name: authUser.user_metadata?.name || 'Usuario',
+          email: authUser.email,
+          memberSince: authUser.created_at?.split('T')[0] || '2024-01-15',
+          totalBookings: 0,
+          hasGymBroPass: false,
+          gymBroPassExpiry: null
+        })
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchUserData()
+  }, [authUser])
 
   // Mock bookings
   const upcomingBookings = [
@@ -62,6 +103,28 @@ const UserProfile = () => {
     { id: 'profile', label: 'Mi Perfil', icon: User },
   ]
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-dark">
+        <Header variant="user" />
+        <div className="flex items-center justify-center min-h-screen">
+          <Loader />
+        </div>
+      </div>
+    )
+  }
+
+  if (!userData) {
+    return (
+      <div className="min-h-screen bg-dark">
+        <Header variant="user" />
+        <div className="flex items-center justify-center min-h-screen">
+          <p className="text-zinc-400">No se pudo cargar la información del usuario</p>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen bg-dark">
       <Header variant="user" />
@@ -91,9 +154,9 @@ const UserProfile = () => {
                     <User className="w-12 h-12 text-primary" />
                   </div>
                   <h3 className="text-xl font-montserrat font-bold mb-1">
-                    {user.name}
+                    {userData.name}
                   </h3>
-                  <p className="text-sm text-zinc-400">{user.email}</p>
+                  <p className="text-sm text-zinc-400">{userData.email}</p>
                 </div>
 
                 <div className="space-y-2">
@@ -116,7 +179,7 @@ const UserProfile = () => {
                 <div className="mt-6 pt-6 border-t border-zinc-800">
                   <div className="text-center">
                     <p className="text-sm text-zinc-400 mb-1">Miembro desde</p>
-                    <p className="font-semibold text-light">{user.memberSince}</p>
+                    <p className="font-semibold text-light">{userData.memberSince}</p>
                   </div>
                 </div>
               </div>
@@ -131,7 +194,7 @@ const UserProfile = () => {
                   animate={{ opacity: 1, y: 0 }}
                   className="space-y-6"
                 >
-                  {user.hasGymBroPass ? (
+                  {userData.hasGymBroPass ? (
                     <>
                       {/* Active GymBro Pass */}
                       <div className="card bg-gradient-to-r from-primary/20 to-primary/5 border-primary">
@@ -158,11 +221,11 @@ const UserProfile = () => {
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                           <div className="bg-dark/50 rounded-lg p-4">
                             <div className="text-sm text-zinc-400 mb-1">Próximo pago</div>
-                            <div className="text-lg font-bold text-light">{user.gymBroPassExpiry}</div>
+                            <div className="text-lg font-bold text-light">{userData.gymBroPassExpiry}</div>
                           </div>
                           <div className="bg-dark/50 rounded-lg p-4">
                             <div className="text-sm text-zinc-400 mb-1">Reservas este mes</div>
-                            <div className="text-lg font-bold text-light">{user.totalBookings}</div>
+                            <div className="text-lg font-bold text-light">{userData.totalBookings}</div>
                           </div>
                           <div className="bg-dark/50 rounded-lg p-4">
                             <div className="text-sm text-zinc-400 mb-1">Ahorro estimado</div>
@@ -249,7 +312,7 @@ const UserProfile = () => {
                             </div>
                             <div className="text-right">
                               <div className="text-sm text-zinc-400 mb-1">Reservas</div>
-                              <div className="text-3xl font-bold text-light">{user.totalBookings}</div>
+                              <div className="text-3xl font-bold text-light">{userData.totalBookings}</div>
                             </div>
                           </div>
                           <div className="bg-primary/10 border border-primary/30 rounded-lg p-4">
@@ -412,7 +475,7 @@ const UserProfile = () => {
                         </label>
                         <input
                           type="text"
-                          defaultValue={user.name}
+                          defaultValue={userData.name}
                           className="input-field"
                         />
                       </div>
@@ -422,7 +485,7 @@ const UserProfile = () => {
                         </label>
                         <input
                           type="email"
-                          defaultValue={user.email}
+                          defaultValue={userData.email}
                           className="input-field"
                         />
                       </div>
