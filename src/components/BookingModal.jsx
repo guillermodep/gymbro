@@ -89,8 +89,8 @@ const BookingModal = ({ isOpen, onClose, gym }) => {
         gym_id: gym.id,
         booking_date: selectedDate,
         booking_time: selectedTime,
-        booking_type: hasGymBroPass ? 'gymbro_pass' : selectedPass,
-        price: hasGymBroPass ? 0 : (selectedPass === 'daily' ? gym.price : gym.price * 0.8)
+        pass_type: hasGymBroPass ? 'gymbro_pass' : 'daily_premium',
+        price: hasGymBroPass ? 0 : gym.price
       }
 
       const { data, error: bookingError } = await bookingHelpers.createBooking(bookingData)
