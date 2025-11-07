@@ -1,28 +1,75 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Mail, Lock, User, Dumbbell } from 'lucide-react'
+import { Mail, Lock, User, Dumbbell, AlertCircle } from 'lucide-react'
+import { useAuth } from '../../contexts/AuthContext'
+import { supabase } from '../../lib/supabase'
+import Loader from '../../components/Loader'
 
 const UserRegister = () => {
   const navigate = useNavigate()
+  const { signUp } = useAuth()
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
     confirmPassword: ''
   })
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
+    setError(null)
     
     if (formData.password !== formData.confirmPassword) {
-      alert('Las contraseñas no coinciden')
+      setError('Las contraseñas no coinciden')
       return
     }
 
-    // Aquí iría la lógica de registro
-    alert('¡Registro exitoso! Bienvenido a GymBro')
-    navigate('/usuario/perfil')
+    if (formData.password.length < 6) {
+      setError('La contraseña debe tener al menos 6 caracteres')
+      return
+    }
+
+    setLoading(true)
+
+    try {
+      // Register with Supabase Auth
+      const { data: authData, error: authError } = await signUp(
+        formData.email,
+        formData.password,
+        {
+          name: formData.name,
+          role: 'user'
+        }
+      )
+
+      if (authError) throw authError
+
+      // Insert into public.users table
+      const { error: insertError } = await supabase
+        .from('users')
+        .insert([
+          {
+            id: authData.user.id,
+            name: formData.name,
+            email: formData.email,
+            role: 'user'
+          }
+        ])
+
+      if (insertError) throw insertError
+
+      // Success - redirect to profile
+      alert('¡Registro exitoso! Bienvenido a GymBro')
+      navigate('/usuario/perfil')
+    } catch (err) {
+      console.error('Registration error:', err)
+      setError(err.message || 'Error al registrarse. Intenta de nuevo.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   const handleChange = (e) => {
@@ -30,6 +77,7 @@ const UserRegister = () => {
       ...formData,
       [e.target.name]: e.target.value
     })
+    if (error) setError(null)
   }
 
   return (
@@ -136,6 +184,14 @@ const UserRegister = () => {
               </div>
             </div>
 
+            {/* Error Message */}
+            {error && (
+              <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4 flex items-start space-x-3">
+                <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
+                <p className="text-sm text-red-500">{error}</p>
+              </div>
+            )}
+
             {/* Terms */}
             <div className="flex items-start space-x-2">
               <input
@@ -157,8 +213,19 @@ const UserRegister = () => {
             </div>
 
             {/* Submit Button */}
-            <button type="submit" className="btn-primary w-full">
-              Crear cuenta
+            <button 
+              type="submit" 
+              className="btn-primary w-full flex items-center justify-center space-x-2"
+              disabled={loading}
+            >
+              {loading ? (
+                <>
+                  <Loader />
+                  <span>Creando cuenta...</span>
+                </>
+              ) : (
+                <span>Crear cuenta</span>
+              )}
             </button>
           </form>
 
