@@ -69,10 +69,8 @@ export const AuthProvider = ({ children }) => {
       
       if (error) throw error
       
-      // Check if user needs email confirmation
-      if (data.user && !data.user.email_confirmed_at && data.user.confirmation_sent_at) {
-        throw new Error('Por favor confirma tu email antes de iniciar sesión')
-      }
+      // Allow login even without email confirmation (for development)
+      // In production, you should enable email confirmation
       
       setSession(data.session)
       setUser(data.user)
