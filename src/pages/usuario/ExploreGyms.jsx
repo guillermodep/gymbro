@@ -1,11 +1,12 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Search, MapPin, Filter, Grid, Map as MapIcon } from 'lucide-react'
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
 import GymCard from '../../components/GymCard'
 import MapView from '../../components/MapView'
-import { mockGyms } from '../../data/mockData'
+import Loader from '../../components/Loader'
+import { gymHelpers } from '../../lib/supabase'
 
 const ExploreGyms = () => {
   const [searchTerm, setSearchTerm] = useState('')
@@ -13,16 +14,40 @@ const ExploreGyms = () => {
   const [selectedActivity, setSelectedActivity] = useState('all')
   const [viewMode, setViewMode] = useState('grid') // 'grid' or 'map'
   const [showFilters, setShowFilters] = useState(false)
+  const [gyms, setGyms] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
   const cities = ['Quito', 'Guayaquil', 'Cuenca']
   const activities = ['CrossFit', 'Yoga', 'Spinning', 'Funcional', 'Pilates', 'Boxing']
 
-  const filteredGyms = mockGyms.filter(gym => {
+  // Fetch gyms from Supabase
+  useEffect(() => {
+    fetchGyms()
+  }, [])
+
+  const fetchGyms = async () => {
+    try {
+      setLoading(true)
+      const { data, error } = await gymHelpers.getAllGyms()
+      
+      if (error) throw error
+      
+      setGyms(data || [])
+    } catch (err) {
+      console.error('Error fetching gyms:', err)
+      setError(err.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const filteredGyms = gyms.filter(gym => {
     const matchesSearch = gym.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          gym.location.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesCity = selectedCity === 'all' || gym.location.includes(selectedCity)
+    const matchesCity = selectedCity === 'all' || gym.city === selectedCity
     const matchesActivity = selectedActivity === 'all' || 
-                           gym.activities.includes(selectedActivity)
+                           gym.activities?.includes(selectedActivity)
     
     return matchesSearch && matchesCity && matchesActivity
   })
@@ -140,35 +165,66 @@ const ExploreGyms = () => {
             )}
           </div>
 
-          {/* Results Count */}
-          <div className="mb-6">
-            <p className="text-zinc-400">
-              {filteredGyms.length} {filteredGyms.length === 1 ? 'gimnasio encontrado' : 'gimnasios encontrados'}
-            </p>
-          </div>
-
-          {/* Gyms Grid or Map */}
-          {viewMode === 'grid' ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {filteredGyms.map((gym) => (
-                <GymCard key={gym.id} gym={gym} />
-              ))}
+          {/* Loading State */}
+          {loading && (
+            <div className="flex justify-center py-20">
+              <Loader />
             </div>
-          ) : (
-            <MapView gyms={filteredGyms} />
           )}
 
-          {/* No Results */}
-          {filteredGyms.length === 0 && (
+          {/* Error State */}
+          {error && !loading && (
             <div className="text-center py-20">
-              <Search className="w-16 h-16 text-zinc-600 mx-auto mb-4" />
-              <h3 className="text-2xl font-montserrat font-bold mb-2">
-                No se encontraron gimnasios
-              </h3>
+              <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-6 max-w-md mx-auto">
+                <h3 className="text-xl font-montserrat font-bold text-red-500 mb-2">
+                  Error al cargar gimnasios
+                </h3>
+                <p className="text-zinc-400 mb-4">{error}</p>
+                <button 
+                  onClick={fetchGyms}
+                  className="btn-primary"
+                >
+                  Reintentar
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Results Count */}
+          {!loading && !error && (
+            <div className="mb-6">
               <p className="text-zinc-400">
-                Intenta ajustar tus filtros de búsqueda
+                {filteredGyms.length} {filteredGyms.length === 1 ? 'gimnasio encontrado' : 'gimnasios encontrados'}
               </p>
             </div>
+          )}
+
+          {/* Gyms Grid or Map */}
+          {!loading && !error && (
+            <>
+              {viewMode === 'grid' ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {filteredGyms.map((gym) => (
+                    <GymCard key={gym.id} gym={gym} />
+                  ))}
+                </div>
+              ) : (
+                <MapView gyms={filteredGyms} />
+              )}
+
+              {/* No Results */}
+              {filteredGyms.length === 0 && (
+                <div className="text-center py-20">
+                  <Search className="w-16 h-16 text-zinc-600 mx-auto mb-4" />
+                  <h3 className="text-2xl font-montserrat font-bold mb-2">
+                    No se encontraron gimnasios
+                  </h3>
+                  <p className="text-zinc-400">
+                    Intenta ajustar tus filtros de búsqueda
+                  </p>
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>

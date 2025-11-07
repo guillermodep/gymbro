@@ -1,12 +1,31 @@
 import { Link } from 'react-router-dom'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Search, MapPin, Calendar, Star, Dumbbell, Users, TrendingUp } from 'lucide-react'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-import { mockGyms } from '../data/mockData'
+import Loader from '../components/Loader'
+import { gymHelpers } from '../lib/supabase'
 
 const Home = () => {
-  const featuredGyms = mockGyms.filter(gym => gym.featured).slice(0, 3)
+  const [featuredGyms, setFeaturedGyms] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetchFeaturedGyms()
+  }, [])
+
+  const fetchFeaturedGyms = async () => {
+    try {
+      const { data, error } = await gymHelpers.getFeaturedGyms()
+      if (error) throw error
+      setFeaturedGyms(data?.slice(0, 3) || [])
+    } catch (err) {
+      console.error('Error fetching featured gyms:', err)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <div className="min-h-screen bg-dark">
@@ -152,8 +171,13 @@ const Home = () => {
             </Link>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {featuredGyms.map((gym, index) => (
+          {loading ? (
+            <div className="flex justify-center py-20">
+              <Loader />
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {featuredGyms.map((gym, index) => (
               <motion.div
                 key={gym.id}
                 initial={{ opacity: 0, y: 30 }}
@@ -202,7 +226,8 @@ const Home = () => {
                 </Link>
               </motion.div>
             ))}
-          </div>
+            </div>
+          )}
 
           <div className="text-center mt-12 md:hidden">
             <Link to="/usuario/explorar" className="btn-secondary">
