@@ -62,16 +62,26 @@ export const AuthProvider = ({ children }) => {
 
   const signIn = async (email, password) => {
     try {
+      console.log('AuthContext: Signing in...')
       const { data, error } = await authHelpers.signIn(email, password)
       
+      console.log('AuthContext: Sign in response:', { data, error })
+      
       if (error) throw error
+      
+      // Check if user needs email confirmation
+      if (data.user && !data.user.email_confirmed_at && data.user.confirmation_sent_at) {
+        throw new Error('Por favor confirma tu email antes de iniciar sesión')
+      }
       
       setSession(data.session)
       setUser(data.user)
       
+      console.log('AuthContext: User set successfully')
+      
       return { data, error: null }
     } catch (error) {
-      console.error('Error signing in:', error)
+      console.error('AuthContext: Error signing in:', error)
       return { data: null, error }
     }
   }

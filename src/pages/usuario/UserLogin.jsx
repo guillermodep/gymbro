@@ -21,10 +21,21 @@ const UserLogin = () => {
     setLoading(true)
 
     try {
+      console.log('Attempting login with:', formData.email)
       const { data, error } = await signIn(formData.email, formData.password)
       
-      if (error) throw error
+      console.log('Login response:', { data, error })
       
+      if (error) {
+        console.error('Login error details:', error)
+        throw error
+      }
+      
+      if (!data || !data.user) {
+        throw new Error('No se recibió información del usuario')
+      }
+      
+      console.log('Login successful, redirecting...')
       // Success - redirect to profile
       navigate('/usuario/perfil')
     } catch (err) {
