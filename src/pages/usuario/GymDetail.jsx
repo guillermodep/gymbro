@@ -1,28 +1,61 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { MapPin, Star, Clock, Users, Calendar, ChevronLeft, Wifi, Car, Coffee, Droplets } from 'lucide-react'
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
 import BookingModal from '../../components/BookingModal'
-import { mockGyms, mockReviews } from '../../data/mockData'
+import Loader from '../../components/Loader'
+import { gymHelpers } from '../../lib/supabase'
+import { mockReviews } from '../../data/mockData'
 
 const GymDetail = () => {
   const { id } = useParams()
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false)
   const [selectedImage, setSelectedImage] = useState(0)
+  const [gym, setGym] = useState(null)
+  const [loading, setLoading] = useState(true)
 
-  const gym = mockGyms.find(g => g.id === parseInt(id))
+  // Fetch gym data from Supabase
+  useEffect(() => {
+    const fetchGym = async () => {
+      try {
+        const { data, error } = await gymHelpers.getGymById(parseInt(id))
+        if (error) throw error
+        setGym(data)
+      } catch (err) {
+        console.error('Error fetching gym:', err)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchGym()
+  }, [id])
+
   const gymReviews = mockReviews.filter(r => r.gymId === parseInt(id))
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-dark">
+        <Header variant="user" />
+        <div className="flex items-center justify-center min-h-screen">
+          <Loader />
+        </div>
+      </div>
+    )
+  }
 
   if (!gym) {
     return (
-      <div className="min-h-screen bg-dark flex items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-2xl font-montserrat font-bold mb-4">Gimnasio no encontrado</h2>
-          <Link to="/usuario/explorar" className="btn-primary">
-            Volver a explorar
-          </Link>
+      <div className="min-h-screen bg-dark">
+        <Header variant="user" />
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="text-center">
+            <h2 className="text-2xl font-montserrat font-bold mb-4">Gimnasio no encontrado</h2>
+            <Link to="/usuario/explorar" className="btn-primary">
+              Volver a explorar
+            </Link>
+          </div>
         </div>
       </div>
     )
