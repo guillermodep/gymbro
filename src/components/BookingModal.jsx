@@ -15,6 +15,17 @@ const BookingModal = ({ isOpen, onClose, gym }) => {
   const [error, setError] = useState(null)
   const [success, setSuccess] = useState(false)
   const [availability, setAvailability] = useState(null)
+  const [timeSlots, setTimeSlots] = useState([
+    { value: '06:00', label: '06:00 AM' },
+    { value: '08:00', label: '08:00 AM' },
+    { value: '10:00', label: '10:00 AM' },
+    { value: '12:00', label: '12:00 PM' },
+    { value: '14:00', label: '02:00 PM' },
+    { value: '16:00', label: '04:00 PM' },
+    { value: '18:00', label: '06:00 PM' },
+    { value: '20:00', label: '08:00 PM' }
+  ])
+  const [slotsAvailability, setSlotsAvailability] = useState({})
 
   // Check if user has GymBro Pass
   useEffect(() => {
@@ -29,20 +40,31 @@ const BookingModal = ({ isOpen, onClose, gym }) => {
     }
   }, [user, isOpen])
 
-  // Check availability when date/time changes
+  // Load availability for all time slots when date changes
   useEffect(() => {
-    const checkAvail = async () => {
-      if (selectedDate && selectedTime && gym) {
-        const result = await bookingHelpers.checkAvailability(
-          gym.id,
-          selectedDate,
-          selectedTime
-        )
-        setAvailability(result)
+    const loadAllAvailability = async () => {
+      if (selectedDate && gym) {
+        const availabilityData = {}
+        for (const slot of timeSlots) {
+          const result = await bookingHelpers.checkAvailability(
+            gym.id,
+            selectedDate,
+            slot.value
+          )
+          availabilityData[slot.value] = result
+        }
+        setSlotsAvailability(availabilityData)
       }
     }
-    checkAvail()
-  }, [selectedDate, selectedTime, gym])
+    loadAllAvailability()
+  }, [selectedDate, gym])
+
+  // Check availability when time changes
+  useEffect(() => {
+    if (selectedDate && selectedTime && slotsAvailability[selectedTime]) {
+      setAvailability(slotsAvailability[selectedTime])
+    }
+  }, [selectedTime, slotsAvailability, selectedDate])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -236,16 +258,29 @@ const BookingModal = ({ isOpen, onClose, gym }) => {
                     onChange={(e) => setSelectedTime(e.target.value)}
                     className="input-field"
                     required
+                    disabled={!selectedDate}
                   >
-                    <option value="">Selecciona un horario</option>
-                    <option value="06:00">06:00 AM</option>
-                    <option value="08:00">08:00 AM</option>
-                    <option value="10:00">10:00 AM</option>
-                    <option value="12:00">12:00 PM</option>
-                    <option value="14:00">02:00 PM</option>
-                    <option value="16:00">04:00 PM</option>
-                    <option value="18:00">06:00 PM</option>
-                    <option value="20:00">08:00 PM</option>
+                    <option value="">
+                      {selectedDate ? 'Selecciona un horario' : 'Primero selecciona una fecha'}
+                    </option>
+                    {timeSlots.map((slot) => {
+                      const avail = slotsAvailability[slot.value]
+                      const availText = avail 
+                        ? avail.available 
+                          ? ` (${avail.availableSpots}/${avail.capacity} disponibles)`
+                          : ' (Lleno)'
+                        : ''
+                      
+                      return (
+                        <option 
+                          key={slot.value} 
+                          value={slot.value}
+                          disabled={avail && !avail.available}
+                        >
+                          {slot.label}{availText}
+                        </option>
+                      )
+                    })}
                   </select>
                 </div>
 
