@@ -5,8 +5,8 @@ Actuá como un ingeniero de software senior, diseñador UI/UX senior y arquitect
 
 # Propósito
 Este proyecto tiene dos aplicaciones en una misma plataforma:
-1. Una **app para usuarios finales (B2C)** que buscan gimnasios pequeños y reservan clases/pases.
-2. Una **app para dueños de gimnasios (B2B)** que gestionan reservas, horarios y cobranzas.
+1. Una **app para usuarios finales (B2C)** que buscan gimnasios y reservan pases diarios o el GymBro Pass mensual ($30/mes para acceso ilimitado).
+2. Una **app para dueños de gimnasios (B2B)** que gestionan reservas, horarios, ingresos con gráficos, y verifican acceso de clientes mediante escaneo QR.
 
 ---
 
@@ -16,23 +16,28 @@ Este proyecto tiene dos aplicaciones en una misma plataforma:
 - Estilo basado en [SmartFit](https://www.smartfit.com.ec/) y [SportClub](https://www.sportclub.com.ar/)
 - Predominio de fondo oscuro (`#000000`), con color principal amarillo (`#FFD600`) y tipografía fuerte.
 - Tipografías: `Montserrat` para títulos, `Open Sans` para texto.
-- Íconos de Lucide o Heroicons.
+- Íconos de **Lucide React** exclusivamente.
 - Mobile-first. Usar **TailwindCSS** para todo el estilo.
 - Transiciones suaves con **Framer Motion**.
 
 ## Navegación y arquitectura:
-- Home: CTA dual ("Soy Usuario" / "Soy Gimnasio").
-- Buscador de gimnasios: por ubicación, tipo de clase y horario.
+- Home: CTA dual ("Explorar Gimnasios" / "Soy Gimnasio").
+- Hero message: "Olvídate de pagar por meses o años. Ahora todo es más flexible: sin contratos, sin compromisos."
+- Sección destacada del **GymBro Pass** ($30/mes, acceso ilimitado a todos los gimnasios).
+- Buscador de gimnasios: por ciudad y tipo de actividad.
 - Sección de registro/login separada para B2C y B2B.
-- Página de precios, reseñas, contacto y blog.
+- Página de precios con 3 planes: **Pase Básico** ($4/día), **Pase Premium** ($8/día), **GymBro Pass** ($30/mes).
+- Páginas de contacto y términos legales.
 
 ## Estructura técnica:
-- Stack: React + Tailwind + Supabase o Firebase.
-- Hosting: Netlify.
-- Componentes reutilizables (cards, modales, formularios).
+- Stack: **React + Vite + TailwindCSS + Framer Motion**.
+- Hosting: **Netlify**.
+- Componentes reutilizables: cards, modales (QR scanner, revenue analytics), formularios.
 - Rutas bien definidas y separadas por público ("/usuario", "/gimnasio").
-- Pasarela de pagos: Stripe (test) o placeholder para Kushki.
-- Mapas: usar Google Maps o Mapbox para ubicación de gimnasios.
+- Pasarela de pagos: Preparado para **Stripe/Kushki** (simulado por ahora).
+- Mapas: **Leaflet + OpenStreetMap** (100% gratuito, sin API keys, sin límites).
+- Gráficos: **Recharts** para analytics de ingresos con gráficos de área y barras.
+- Librerías: `react-router-dom`, `framer-motion`, `lucide-react`, `leaflet`, `react-leaflet`, `recharts`.
 
 ---
 

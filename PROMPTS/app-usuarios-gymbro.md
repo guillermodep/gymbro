@@ -2,9 +2,10 @@
 Actuá como un ingeniero frontend senior. Vas a desarrollar la **app web para usuarios finales de GymBro**, bajo el stack React + TailwindCSS, con estilo visual inspirado en Smart Fit.
 
 Esta app permitirá a cualquier persona:
-- Buscar gimnasios por zona, tipo de actividad y horario.
-- Comprar pases diarios o mensuales.
-- Reservar clases y dejar calificaciones.
+- Buscar gimnasios por ciudad y tipo de actividad.
+- Comprar **Pase Básico** ($4/día), **Pase Premium** ($8/día) o suscribirse al **GymBro Pass** ($30/mes, acceso ilimitado).
+- Reservar pases diarios y ver historial de reservas.
+- Dejar calificaciones y reviews.
 
 ---
 
@@ -23,10 +24,11 @@ Esta app permitirá a cualquier persona:
 3. Página de gimnasio individual:
    - Fotos, descripción, clases disponibles, botón “Reservar”.
 4. Registro/Login de usuario.
-5. Mi cuenta:
-   - Historial de reservas.
-   - Pases activos.
-   - Clases próximas.
+5. Mi cuenta (Perfil de usuario):
+   - Historial de reservas con detalles.
+   - Pases activos y próximos.
+   - **Sección Mi Membresía**: muestra si tiene GymBro Pass activo, beneficios, fecha de expiración.
+   - Configuración de perfil.
 6. Sistema de calificación post-visita.
 ---
 
@@ -34,14 +36,15 @@ Esta app permitirá a cualquier persona:
 - Header con navegación fija.
 - Botones CTA amarillos con fondo oscuro.
 - Cards reutilizables de gimnasio.
-- Modal de reserva con selector de fecha/hora.
+- **Modal de reserva**: muestra precio del pase diario y promoción del GymBro Pass con enlace a precios.
 - Loader, toaster de confirmación y estados (éxito/error).
 
-- **Mapa con Google Maps Embed o API JS**:
-   - Marcadores dinámicos.
+- **Mapa con Leaflet + OpenStreetMap**:
+   - Marcadores dinámicos con colores personalizados.
+   - Popups interactivos con información completa.
    - Integración con el filtro de búsqueda.
-   - Soporte para mobile (pinch/zoom).
-   - Debe pedir permiso de ubicación al usuario.
+   - Soporte para mobile (pinch/zoom nativo).
+   - 100% gratuito, sin límites de uso.
 ---
 
 # Especificaciones visuales:

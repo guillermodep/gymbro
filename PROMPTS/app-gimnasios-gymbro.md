@@ -1,8 +1,9 @@
 # Rol
 Actuá como ingeniero frontend senior. Vas a construir la **app web para dueños de gimnasios (B2B)** de GymBro. Esta sección funciona como un mini-SaaS gratuito para que los gimnasios puedan:
 - Administrar sus clases, horarios y cupos.
-- Recibir reservas de usuarios GymBro.
-- Ver reportes e historial de ingresos.
+- Recibir y gestionar reservas de usuarios GymBro.
+- **Ver reportes detallados de ingresos** con gráficos interactivos (Recharts).
+- **Verificar acceso de clientes** mediante escaneo QR simulado.
 
 ---
 
@@ -15,20 +16,24 @@ Actuá como ingeniero frontend senior. Vas a construir la **app web para dueños
    - Tipo de actividades.
    - Carga de horarios y cupos.
 3. Dashboard:
-   - Calendario semanal de clases.
-   - Lista de reservas diarias.
-   - Historial de ingresos.
-   - Notificaciones o reseñas de usuarios.
+   - **Botón QR prominente** en amarillo para escanear códigos de clientes.
+   - Tarjetas de métricas: Reservas Hoy, **Ingresos del Mes (clickeable)**, Ocupación, Calificación.
+   - Lista de reservas diarias con estado (completado/pendiente).
+   - Clases de hoy con capacidad y progreso visual.
+   - **Modal de Ingresos**: gráficos de área y barras con Recharts, desglose diario, total mensual.
+   - **Modal QR Scanner**: simula escaneo, muestra datos del cliente, membresía, mensaje de bienvenida.
 4. Página de perfil de gimnasio (edición de datos).
 
 ---
 
 # Componentes clave:
+- **QRScannerModal**: Modal con animación de escaneo, muestra foto del cliente, datos de membresía (GymBro Pass/Pase Diario), última visita, total visitas, mensaje de bienvenida personalizado.
+- **RevenueModal**: Modal con gráficos de Recharts (área y barras), estadísticas (total, promedio, mejor día), tabla de desglose diario con 30 días de datos, botón exportar.
+- Tarjetas de métricas clickeables (especialmente Ingresos del Mes).
 - Tabla de clases con filtros por fecha.
-- Tarjeta de reserva con botón “Marcar como atendido”.
+- Tarjeta de reserva con botón "Marcar como atendido".
 - Componente de carga de imagen.
-- Integración (simulada o real) con Google Maps para ubicación.
-- Panel de métricas: total de reservas, clases más populares, ingresos estimados.
+- Panel de métricas con datos en tiempo real.
 
 ---
 
