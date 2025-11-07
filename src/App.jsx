@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { AnimatePresence } from 'framer-motion'
+import { AuthProvider } from './contexts/AuthContext'
 
 // Public Pages
 import Home from './pages/Home'
@@ -25,9 +26,10 @@ import Contact from './pages/Contact'
 
 function App() {
   return (
-    <Router>
-      <AnimatePresence mode="wait">
-        <Routes>
+    <AuthProvider>
+      <Router>
+        <AnimatePresence mode="wait">
+          <Routes>
           {/* Public Routes */}
           <Route path="/" element={<Home />} />
           <Route path="/precios" element={<Pricing />} />
@@ -52,6 +54,7 @@ function App() {
         </Routes>
       </AnimatePresence>
     </Router>
+    </AuthProvider>
   )
 }
 

@@ -1,20 +1,38 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Mail, Lock, Dumbbell } from 'lucide-react'
+import { Mail, Lock, Dumbbell, AlertCircle } from 'lucide-react'
+import { useAuth } from '../../contexts/AuthContext'
+import Loader from '../../components/Loader'
 
 const UserLogin = () => {
   const navigate = useNavigate()
+  const { signIn } = useAuth()
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   })
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    // Aquí iría la lógica de autenticación
-    alert('¡Inicio de sesión exitoso!')
-    navigate('/usuario/perfil')
+    setError(null)
+    setLoading(true)
+
+    try {
+      const { data, error } = await signIn(formData.email, formData.password)
+      
+      if (error) throw error
+      
+      // Success - redirect to profile
+      navigate('/usuario/perfil')
+    } catch (err) {
+      console.error('Login error:', err)
+      setError(err.message || 'Error al iniciar sesión. Verifica tus credenciales.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   const handleChange = (e) => {
@@ -22,6 +40,8 @@ const UserLogin = () => {
       ...formData,
       [e.target.name]: e.target.value
     })
+    // Clear error when user types
+    if (error) setError(null)
   }
 
   return (
@@ -89,6 +109,14 @@ const UserLogin = () => {
               </div>
             </div>
 
+            {/* Error Message */}
+            {error && (
+              <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4 flex items-start space-x-3">
+                <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
+                <p className="text-sm text-red-500">{error}</p>
+              </div>
+            )}
+
             {/* Forgot Password */}
             <div className="text-right">
               <Link to="/usuario/recuperar" className="text-sm text-primary hover:underline">
@@ -97,8 +125,19 @@ const UserLogin = () => {
             </div>
 
             {/* Submit Button */}
-            <button type="submit" className="btn-primary w-full">
-              Iniciar Sesión
+            <button 
+              type="submit" 
+              className="btn-primary w-full flex items-center justify-center space-x-2"
+              disabled={loading}
+            >
+              {loading ? (
+                <>
+                  <Loader />
+                  <span>Iniciando sesión...</span>
+                </>
+              ) : (
+                <span>Iniciar Sesión</span>
+              )}
             </button>
           </form>
 
