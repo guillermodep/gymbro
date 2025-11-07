@@ -1,11 +1,16 @@
-import { useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
-import { Menu, X, Dumbbell } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { Menu, X, Dumbbell, User, LogOut } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useAuth } from '../contexts/AuthContext'
+import { supabase } from '../lib/supabase'
 
 const Header = ({ variant = 'public' }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [userName, setUserName] = useState(null)
   const location = useLocation()
+  const navigate = useNavigate()
+  const { user, signOut } = useAuth()
 
   const isActive = (path) => location.pathname === path
 
@@ -27,6 +32,40 @@ const Header = ({ variant = 'public' }) => {
   ]
 
   const links = variant === 'user' ? userLinks : variant === 'gym' ? gymLinks : publicLinks
+
+  // Fetch user name from public.users
+  useEffect(() => {
+    const fetchUserName = async () => {
+      if (user) {
+        // First try to get name from metadata
+        const metaName = user.user_metadata?.name
+        if (metaName) {
+          setUserName(metaName)
+          return
+        }
+
+        // If not in metadata, fetch from public.users
+        const { data, error } = await supabase
+          .from('users')
+          .select('name')
+          .eq('id', user.id)
+          .single()
+
+        if (!error && data) {
+          setUserName(data.name)
+        }
+      } else {
+        setUserName(null)
+      }
+    }
+
+    fetchUserName()
+  }, [user])
+
+  const handleLogout = async () => {
+    await signOut()
+    navigate('/')
+  }
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-dark/95 backdrop-blur-sm border-b border-zinc-800">
@@ -56,7 +95,7 @@ const Header = ({ variant = 'public' }) => {
               </Link>
             ))}
             
-            {variant === 'public' && (
+            {variant === 'public' ? (
               <div className="flex items-center space-x-4">
                 <Link to="/usuario/login" className="btn-secondary text-sm px-4 py-2">
                   Iniciar Sesión
@@ -64,6 +103,22 @@ const Header = ({ variant = 'public' }) => {
                 <Link to="/gimnasio" className="btn-primary text-sm px-4 py-2">
                   Soy Gimnasio
                 </Link>
+              </div>
+            ) : (
+              <div className="flex items-center space-x-4">
+                {userName && (
+                  <div className="flex items-center space-x-2 text-light">
+                    <User className="w-5 h-5 text-primary" />
+                    <span className="font-semibold">{userName}</span>
+                  </div>
+                )}
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center space-x-2 text-light hover:text-primary transition-colors"
+                >
+                  <LogOut className="w-5 h-5" />
+                  <span className="font-semibold">Salir</span>
+                </button>
               </div>
             )}
           </div>
