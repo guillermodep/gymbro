@@ -36,6 +36,7 @@ const UserRegister = () => {
 
     try {
       // Register with Supabase Auth
+      // The trigger will automatically create the user in public.users
       const { data: authData, error: authError } = await signUp(
         formData.email,
         formData.password,
@@ -46,20 +47,6 @@ const UserRegister = () => {
       )
 
       if (authError) throw authError
-
-      // Insert into public.users table
-      const { error: insertError } = await supabase
-        .from('users')
-        .insert([
-          {
-            id: authData.user.id,
-            name: formData.name,
-            email: formData.email,
-            role: 'user'
-          }
-        ])
-
-      if (insertError) throw insertError
 
       // Success - redirect to profile
       alert('¡Registro exitoso! Bienvenido a GymBro')
