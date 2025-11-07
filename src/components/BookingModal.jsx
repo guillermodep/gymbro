@@ -1,18 +1,93 @@
-import { useState } from 'react'
-import { X, Calendar, Clock, CreditCard } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { X, Calendar, Clock, CreditCard, AlertCircle, CheckCircle } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useAuth } from '../contexts/AuthContext'
+import { bookingHelpers, membershipHelpers } from '../lib/supabase'
+import Loader from './Loader'
 
 const BookingModal = ({ isOpen, onClose, gym }) => {
+  const { user } = useAuth()
   const [selectedDate, setSelectedDate] = useState('')
   const [selectedTime, setSelectedTime] = useState('')
   const [selectedPass, setSelectedPass] = useState('daily')
-  const [hasGymBroPass, setHasGymBroPass] = useState(false) // Simular si el usuario tiene el pass
+  const [hasGymBroPass, setHasGymBroPass] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
+  const [success, setSuccess] = useState(false)
+  const [availability, setAvailability] = useState(null)
 
-  const handleSubmit = (e) => {
+  // Check if user has GymBro Pass
+  useEffect(() => {
+    const checkMembership = async () => {
+      if (user) {
+        const { data } = await membershipHelpers.getUserMembership(user.id)
+        setHasGymBroPass(!!data)
+      }
+    }
+    if (isOpen) {
+      checkMembership()
+    }
+  }, [user, isOpen])
+
+  // Check availability when date/time changes
+  useEffect(() => {
+    const checkAvail = async () => {
+      if (selectedDate && selectedTime && gym) {
+        const result = await bookingHelpers.checkAvailability(
+          gym.id,
+          selectedDate,
+          selectedTime
+        )
+        setAvailability(result)
+      }
+    }
+    checkAvail()
+  }, [selectedDate, selectedTime, gym])
+
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    // Aquí iría la lógica de reserva
-    alert('¡Reserva confirmada! Te enviaremos un email con los detalles.')
-    onClose()
+    setError(null)
+    setLoading(true)
+
+    if (!user) {
+      setError('Debes iniciar sesión para hacer una reserva')
+      setLoading(false)
+      return
+    }
+
+    if (!selectedDate || !selectedTime) {
+      setError('Por favor selecciona fecha y hora')
+      setLoading(false)
+      return
+    }
+
+    try {
+      const bookingData = {
+        user_id: user.id,
+        gym_id: gym.id,
+        booking_date: selectedDate,
+        booking_time: selectedTime,
+        booking_type: hasGymBroPass ? 'gymbro_pass' : selectedPass,
+        price: hasGymBroPass ? 0 : (selectedPass === 'daily' ? gym.price : gym.price * 0.8)
+      }
+
+      const { data, error: bookingError } = await bookingHelpers.createBooking(bookingData)
+
+      if (bookingError) throw bookingError
+
+      setSuccess(true)
+      setTimeout(() => {
+        onClose()
+        setSuccess(false)
+        setSelectedDate('')
+        setSelectedTime('')
+      }, 2000)
+    } catch (err) {
+      console.error('Booking error:', err)
+      setError(err.message || 'Error al crear la reserva. Intenta de nuevo.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   if (!gym) return null
@@ -53,6 +128,29 @@ const BookingModal = ({ isOpen, onClose, gym }) => {
 
               {/* Content */}
               <form onSubmit={handleSubmit} className="p-6 space-y-6">
+                {/* Success Message */}
+                {success && (
+                  <div className="bg-green-500/10 border border-green-500 rounded-lg p-4">
+                    <div className="flex items-center space-x-3">
+                      <CheckCircle className="w-5 h-5 text-green-500" />
+                      <div>
+                        <div className="font-semibold text-green-500">¡Reserva confirmada!</div>
+                        <div className="text-sm text-zinc-300">Te enviaremos un email con los detalles</div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Error Message */}
+                {error && (
+                  <div className="bg-red-500/10 border border-red-500 rounded-lg p-4">
+                    <div className="flex items-center space-x-3">
+                      <AlertCircle className="w-5 h-5 text-red-500" />
+                      <div className="text-sm text-red-500">{error}</div>
+                    </div>
+                  </div>
+                )}
+
                 {/* GymBro Pass Banner */}
                 {hasGymBroPass && (
                   <div className="bg-gradient-to-r from-primary/20 to-primary/5 border-2 border-primary rounded-lg p-4">
@@ -151,6 +249,27 @@ const BookingModal = ({ isOpen, onClose, gym }) => {
                   </select>
                 </div>
 
+                {/* Availability Indicator */}
+                {availability && selectedDate && selectedTime && (
+                  <div className={`rounded-lg p-3 border ${
+                    availability.available 
+                      ? 'bg-green-500/10 border-green-500' 
+                      : 'bg-red-500/10 border-red-500'
+                  }`}>
+                    <div className="text-sm">
+                      {availability.available ? (
+                        <span className="text-green-500 font-semibold">
+                          ✓ Disponible ({availability.availableSpots} de {availability.capacity} espacios)
+                        </span>
+                      ) : (
+                        <span className="text-red-500 font-semibold">
+                          ✗ No hay disponibilidad para esta fecha y hora
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                )}
+
                 {/* Payment Info */}
                 {!hasGymBroPass && (
                   <div className="bg-zinc-800 rounded-lg p-4">
@@ -173,13 +292,34 @@ const BookingModal = ({ isOpen, onClose, gym }) => {
                     type="button"
                     onClick={onClose}
                     className="flex-1 btn-secondary"
+                    disabled={loading}
                   >
                     Cancelar
                   </button>
-                  <button type="submit" className="flex-1 btn-primary">
-                    Confirmar Reserva
+                  <button 
+                    type="submit" 
+                    className="flex-1 btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled={loading || (availability && !availability.available) || !user}
+                  >
+                    {loading ? (
+                      <span className="flex items-center justify-center">
+                        <Loader />
+                        <span className="ml-2">Procesando...</span>
+                      </span>
+                    ) : (
+                      'Confirmar Reserva'
+                    )}
                   </button>
                 </div>
+
+                {/* Login prompt */}
+                {!user && (
+                  <div className="text-center text-sm text-zinc-400">
+                    <a href="/usuario/login" className="text-primary hover:underline">
+                      Inicia sesión
+                    </a> para hacer una reserva
+                  </div>
+                )}
               </form>
             </div>
           </motion.div>

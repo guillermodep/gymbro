@@ -123,17 +123,79 @@ export const gymHelpers = {
 
 // Booking helpers
 export const bookingHelpers = {
-  // Create booking
-  createBooking: async (bookingData) => {
-    const { data, error } = await supabase
-      .from('bookings')
-      .insert([bookingData])
-      .select()
-      .single()
-    return { data, error }
+  // Check availability for a specific date/time
+  checkAvailability: async (gymId, bookingDate, bookingTime) => {
+    try {
+      // Get gym capacity
+      const { data: gym, error: gymError } = await supabase
+        .from('gyms')
+        .select('capacity')
+        .eq('id', gymId)
+        .single()
+
+      if (gymError) throw gymError
+
+      // Count existing bookings for that date/time
+      const { data: bookings, error: bookingsError } = await supabase
+        .from('bookings')
+        .select('id')
+        .eq('gym_id', gymId)
+        .eq('booking_date', bookingDate)
+        .eq('booking_time', bookingTime)
+        .in('status', ['confirmed', 'pending'])
+
+      if (bookingsError) throw bookingsError
+
+      const availableSpots = gym.capacity - (bookings?.length || 0)
+      
+      return { 
+        available: availableSpots > 0, 
+        availableSpots,
+        capacity: gym.capacity,
+        error: null 
+      }
+    } catch (error) {
+      return { available: false, availableSpots: 0, capacity: 0, error }
+    }
   },
 
-  // Get user bookings
+  // Create booking with validation
+  createBooking: async (bookingData) => {
+    try {
+      // Check availability first
+      const availability = await bookingHelpers.checkAvailability(
+        bookingData.gym_id,
+        bookingData.booking_date,
+        bookingData.booking_time
+      )
+
+      if (!availability.available) {
+        return { 
+          data: null, 
+          error: { message: 'No hay disponibilidad para esta fecha y hora' } 
+        }
+      }
+
+      // Create booking
+      const { data, error } = await supabase
+        .from('bookings')
+        .insert([{
+          ...bookingData,
+          status: 'confirmed'
+        }])
+        .select(`
+          *,
+          gyms (*)
+        `)
+        .single()
+
+      return { data, error }
+    } catch (error) {
+      return { data: null, error }
+    }
+  },
+
+  // Get user bookings (upcoming and past)
   getUserBookings: async (userId) => {
     const { data, error } = await supabase
       .from('bookings')
@@ -146,16 +208,67 @@ export const bookingHelpers = {
     return { data, error }
   },
 
-  // Get gym bookings
-  getGymBookings: async (gymId) => {
+  // Get upcoming user bookings
+  getUpcomingBookings: async (userId) => {
+    const today = new Date().toISOString().split('T')[0]
     const { data, error } = await supabase
       .from('bookings')
       .select(`
         *,
-        users (*)
+        gyms (*)
+      `)
+      .eq('user_id', userId)
+      .gte('booking_date', today)
+      .in('status', ['confirmed', 'pending'])
+      .order('booking_date', { ascending: true })
+    return { data, error }
+  },
+
+  // Get past user bookings
+  getPastBookings: async (userId) => {
+    const today = new Date().toISOString().split('T')[0]
+    const { data, error } = await supabase
+      .from('bookings')
+      .select(`
+        *,
+        gyms (*)
+      `)
+      .eq('user_id', userId)
+      .lt('booking_date', today)
+      .order('booking_date', { ascending: false })
+    return { data, error }
+  },
+
+  // Get gym bookings
+  getGymBookings: async (gymId, date = null) => {
+    let query = supabase
+      .from('bookings')
+      .select(`
+        *,
+        users (name, email)
       `)
       .eq('gym_id', gymId)
+
+    if (date) {
+      query = query.eq('booking_date', date)
+    }
+
+    const { data, error } = await query
       .order('booking_date', { ascending: false })
+      .order('booking_time', { ascending: true })
+
+    return { data, error }
+  },
+
+  // Cancel booking
+  cancelBooking: async (bookingId, userId) => {
+    const { data, error } = await supabase
+      .from('bookings')
+      .update({ status: 'cancelled' })
+      .eq('id', bookingId)
+      .eq('user_id', userId) // Ensure user owns the booking
+      .select()
+      .single()
     return { data, error }
   },
 
