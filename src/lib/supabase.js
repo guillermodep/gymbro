@@ -25,7 +25,8 @@ export const authHelpers = {
       email,
       password,
       options: {
-        data: userData
+        data: userData,
+        emailRedirectTo: undefined // No email confirmation required
       }
     })
     return { data, error }

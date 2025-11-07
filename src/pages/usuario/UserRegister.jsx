@@ -35,8 +35,7 @@ const UserRegister = () => {
     setLoading(true)
 
     try {
-      // Register with Supabase Auth
-      // The trigger will automatically create the user in public.users
+      // Register with Supabase Auth (no email confirmation)
       const { data: authData, error: authError } = await signUp(
         formData.email,
         formData.password,
@@ -47,6 +46,9 @@ const UserRegister = () => {
       )
 
       if (authError) throw authError
+
+      // Wait a bit for the trigger to execute
+      await new Promise(resolve => setTimeout(resolve, 1000))
 
       // Success - redirect to profile
       alert('¡Registro exitoso! Bienvenido a GymBro')
