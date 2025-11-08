@@ -235,9 +235,14 @@ const GymDetail = () => {
                     </span>
                     <span className="text-zinc-400">/día</span>
                   </div>
-                  <p className="text-sm text-zinc-400">
-                    Pase mensual: ${gym.price * 20}
-                  </p>
+                  <div className="space-y-1">
+                    <p className="text-sm text-zinc-400">
+                      Pase mensual: ${gym.price * 20}
+                    </p>
+                    <p className="text-sm font-semibold text-primary">
+                      ó adquiere GymBro Pass por $30/mes
+                    </p>
+                  </div>
                 </div>
 
                 <button
