@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { X, Calendar, Clock, CreditCard, AlertCircle, CheckCircle } from 'lucide-react'
+import { X, Calendar, Clock, CreditCard, AlertCircle, CheckCircle, Mail, QrCode } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useAuth } from '../contexts/AuthContext'
 import { bookingHelpers, membershipHelpers } from '../lib/supabase'
@@ -14,6 +14,7 @@ const BookingModal = ({ isOpen, onClose, gym }) => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
   const [success, setSuccess] = useState(false)
+  const [showQRAnimation, setShowQRAnimation] = useState(false)
   const [availability, setAvailability] = useState(null)
   const [timeSlots, setTimeSlots] = useState([
     { value: '06:00', label: '06:00 AM' },
@@ -97,13 +98,19 @@ const BookingModal = ({ isOpen, onClose, gym }) => {
 
       if (bookingError) throw bookingError
 
+      // Show success and QR animation
       setSuccess(true)
+      setShowQRAnimation(true)
+      
       setTimeout(() => {
-        onClose()
-        setSuccess(false)
-        setSelectedDate('')
-        setSelectedTime('')
-      }, 2000)
+        setShowQRAnimation(false)
+        setTimeout(() => {
+          onClose()
+          setSuccess(false)
+          setSelectedDate('')
+          setSelectedTime('')
+        }, 500)
+      }, 3000)
     } catch (err) {
       console.error('Booking error:', err)
       setError(err.message || 'Error al crear la reserva. Intenta de nuevo.')
@@ -150,18 +157,96 @@ const BookingModal = ({ isOpen, onClose, gym }) => {
 
               {/* Content */}
               <form onSubmit={handleSubmit} className="p-6 space-y-6">
-                {/* Success Message */}
-                {success && (
-                  <div className="bg-green-500/10 border border-green-500 rounded-lg p-4">
-                    <div className="flex items-center space-x-3">
-                      <CheckCircle className="w-5 h-5 text-green-500" />
-                      <div>
-                        <div className="font-semibold text-green-500">¡Reserva confirmada!</div>
-                        <div className="text-sm text-zinc-300">Te enviaremos un email con los detalles</div>
+                {/* QR Animation */}
+                <AnimatePresence>
+                  {showQRAnimation && (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.8 }}
+                      className="bg-gradient-to-br from-green-500/20 to-primary/20 border-2 border-green-500 rounded-xl p-6 text-center"
+                    >
+                      <div className="flex flex-col items-center space-y-4">
+                        {/* QR Icon Animation */}
+                        <motion.div
+                          animate={{ 
+                            scale: [1, 1.1, 1],
+                            rotate: [0, 5, -5, 0]
+                          }}
+                          transition={{ 
+                            duration: 0.6,
+                            repeat: Infinity,
+                            repeatDelay: 0.5
+                          }}
+                          className="relative"
+                        >
+                          <div className="bg-white p-4 rounded-xl">
+                            <QrCode className="w-16 h-16 text-dark" />
+                          </div>
+                          {/* Pulse effect */}
+                          <motion.div
+                            animate={{ 
+                              scale: [1, 1.5, 1.5],
+                              opacity: [0.5, 0, 0]
+                            }}
+                            transition={{ 
+                              duration: 1.5,
+                              repeat: Infinity
+                            }}
+                            className="absolute inset-0 bg-green-500 rounded-xl"
+                          />
+                        </motion.div>
+
+                        {/* Email Animation */}
+                        <motion.div
+                          initial={{ x: -50, opacity: 0 }}
+                          animate={{ x: 0, opacity: 1 }}
+                          transition={{ delay: 0.3 }}
+                          className="flex items-center space-x-3"
+                        >
+                          <motion.div
+                            animate={{ x: [0, 10, 0] }}
+                            transition={{ 
+                              duration: 1,
+                              repeat: Infinity,
+                              repeatDelay: 0.5
+                            }}
+                          >
+                            <Mail className="w-6 h-6 text-primary" />
+                          </motion.div>
+                          <div className="text-left">
+                            <div className="font-bold text-green-500 flex items-center">
+                              <CheckCircle className="w-5 h-5 mr-2" />
+                              ¡Reserva Confirmada!
+                            </div>
+                            <div className="text-sm text-zinc-300">
+                              Enviando QR a {user?.email}
+                            </div>
+                          </div>
+                        </motion.div>
+
+                        {/* Loading dots */}
+                        <div className="flex space-x-2">
+                          {[0, 1, 2].map((i) => (
+                            <motion.div
+                              key={i}
+                              animate={{ 
+                                y: [0, -10, 0],
+                                opacity: [0.3, 1, 0.3]
+                              }}
+                              transition={{ 
+                                duration: 0.6,
+                                repeat: Infinity,
+                                delay: i * 0.2
+                              }}
+                              className="w-2 h-2 bg-primary rounded-full"
+                            />
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                )}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
 
                 {/* Error Message */}
                 {error && (
