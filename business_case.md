@@ -166,14 +166,50 @@ Con GymBro:
 
 ### 6.1 Tamaño del Mercado (Ecuador)
 
-| Segmento | Población | TAM Anual |
-|----------|-----------|-----------|
-| Quito | 2.8M habitantes | $168M |
-| Guayaquil | 2.7M habitantes | $162M |
-| Cuenca | 600K habitantes | $36M |
-| **Total Ecuador** | **6.1M urbano** | **$366M** |
+#### **Número de Gimnasios por Ciudad**
 
-**Cálculo TAM**: 6.1M × 10% fitness-conscious × $600/año promedio
+Basado en datos del Municipio de Quito y registros comerciales:
+
+| Ciudad | Gimnasios Estimados | Crecimiento Anual | Notas |
+|--------|---------------------|-------------------|-------|
+| **Quito** | **800-1,000** | +300% (2019-2025) | 170 nuevas licencias solo en ene-may 2025 |
+| **Guayaquil** | **600-800** | +150% | Cadenas como Smart Fit, Taurus expandiéndose |
+| **Cuenca** | **150-200** | +100% | Mercado emergente |
+| **Total Ecuador** | **~1,600-2,000** | - | Boom post-pandemia |
+
+**Fuentes**: 
+- Secretaría de Desarrollo Económico Quito (2025)
+- Primicias Ecuador - Análisis mercado fitness
+- Registros comerciales municipales
+
+#### **Penetración de Mercado**
+
+| Métrica | Ecuador | LATAM Promedio | Países Desarrollados |
+|---------|---------|----------------|---------------------|
+| **Población que va al gym** | **8-12%** | 15-18% | 20-25% |
+| **Gasto promedio anual** | **$480-960** | $600-800 | $800-1,200 |
+| **Frecuencia promedio** | 2-3x/semana | 3x/semana | 3-4x/semana |
+
+**Insights Clave**:
+- Solo el **10%** de ecuatorianos urbanos tienen membresía activa de gimnasio
+- **36%** de brasileños pagan por fitness (referencia regional)
+- Ecuador tiene **baja penetración** comparado con la región = **oportunidad de crecimiento**
+- Mercado fitness Ecuador: **~$40M anuales** (2024)
+
+#### **TAM (Total Addressable Market)**
+
+| Segmento | Población | Penetración | Gasto Anual | TAM |
+|----------|-----------|-------------|-------------|-----|
+| Quito | 2.8M | 10% | $600 | $168M |
+| Guayaquil | 2.7M | 10% | $600 | $162M |
+| Cuenca | 600K | 10% | $600 | $36M |
+| **Total Ecuador** | **6.1M urbano** | **10%** | **$600** | **$366M** |
+
+**Cálculo**: 6.1M habitantes urbanos × 10% fitness-conscious × $600/año promedio
+
+**Potencial de Crecimiento**:
+- Si Ecuador alcanza penetración de Brasil (36%): **TAM = $1.3B**
+- Mercado actual $40M → Potencial $1.3B = **32x oportunidad**
 
 ### 6.2 Segmentos de Clientes
 
