@@ -101,14 +101,17 @@ Ingresos Año 2: ~$2.3M
 
 #### **Ejemplo Real: McKenzies Fitness Studio**
 ```
-Capacidad: 30 personas
-Ocupación actual: 18 personas (60%)
-Espacios ociosos: 12 personas
+Capacidad: 75 personas
+Ocupación actual: 45 personas (60%)
+Espacios ociosos: 30 personas
 
 Con GymBro:
-- 8 visitas diarias adicionales × $4 (pago por visita) = $32/día
-- $32 × 25 días = $800/mes adicional
-- $9,600/año en ingresos incrementales
+- 20 visitas diarias adicionales × $4 (pago por visita) = $80/día
+- $80 × 25 días = $2,000/mes adicional
+- $24,000/año en ingresos incrementales
+
+Ocupación con GymBro: 65 personas (87%)
+ROI para el gimnasio: +13% ingresos mensuales sin inversión adicional
 ```
 
 ### 4.2 Adquisición de Clientes
