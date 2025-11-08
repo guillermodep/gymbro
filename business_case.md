@@ -14,7 +14,7 @@
 ## 1. Problema del Mercado
 
 ### 1.1 Usuarios
-- ❌ Membresías mensuales caras ($240/mes promedio)
+- ❌ Membresías mensuales caras ($80/mes promedio)
 - ❌ Compromiso de largo plazo sin flexibilidad
 - ❌ Limitación a un solo gimnasio
 - ❌ Pérdida de dinero si no asisten regularmente
@@ -50,8 +50,8 @@
 
 | Tipo de Transacción | Comisión GymBro | Ingreso Gimnasio |
 |---------------------|-----------------|------------------|
-| Pase Diario Basic ($8) | 20% ($1.60) | 80% ($6.40) |
-| Pase Diario Premium ($12) | 20% ($2.40) | 80% ($9.60) |
+| Pase Diario Basic ($8) | 35% ($2.80) | 65% ($5.20) |
+| Pase Diario Premium ($12) | 35% ($4.20) | 65% ($7.80) |
 | GymBro Pass ($30) | 100% inicial | Pago por visita* |
 
 *GymBro paga al gimnasio $3-5 por visita de usuario con GymBro Pass
@@ -62,30 +62,30 @@
 ```
 Mes 1-3: 500 usuarios
 - 300 GymBro Pass × $30 = $9,000/mes
-- 200 pases diarios × $10 promedio × 20% = $400/mes
-- Total: $9,400/mes
+- 200 pases diarios × $10 promedio × 35% = $700/mes
+- Total: $9,700/mes
 
 Mes 4-6: 1,500 usuarios
 - 900 GymBro Pass × $30 = $27,000/mes
-- 600 pases diarios × $10 × 20% = $1,200/mes
-- Total: $28,200/mes
+- 600 pases diarios × $10 × 35% = $2,100/mes
+- Total: $29,100/mes
 
 Mes 7-12: 3,000 usuarios
 - 1,800 GymBro Pass × $30 = $54,000/mes
-- 1,200 pases diarios × $10 × 20% = $2,400/mes
-- Total: $56,400/mes
+- 1,200 pases diarios × $10 × 35% = $4,200/mes
+- Total: $58,200/mes
 
-Ingresos Año 1: ~$400,000
+Ingresos Año 1: ~$430,000
 ```
 
 #### Escenario Optimista (Año 2-3)
 ```
 10,000 usuarios activos
 - 6,000 GymBro Pass × $30 = $180,000/mes
-- 4,000 pases diarios × $10 × 20% = $8,000/mes
-- Total: $188,000/mes
+- 4,000 pases diarios × $10 × 35% = $14,000/mes
+- Total: $194,000/mes
 
-Ingresos Año 2: ~$2.2M
+Ingresos Año 2: ~$2.3M
 ```
 
 ---
