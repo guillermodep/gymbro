@@ -85,16 +85,20 @@ Este documento organiza las funcionalidades pendientes para completar el MVP y l
 ### 3. Geolocalización del Usuario ⭐⭐
 **Prioridad: MEDIA-ALTA**
 
-- [ ] Implementar `navigator.geolocation.getCurrentPosition()`
-- [ ] Pedir permiso de ubicación al usuario
-- [ ] Calcular distancia entre usuario y gimnasios
-- [ ] Agregar filtro "Cerca de mí" (radio: 1km, 5km, 10km)
-- [ ] Ordenar gimnasios por distancia
+- [x] Implementar `navigator.geolocation.getCurrentPosition()`
+- [x] Pedir permiso de ubicación al usuario
+- [x] Calcular distancia entre usuario y gimnasios (Haversine)
+- [x] Agregar filtro "Cerca de mí" (radio: 1km, 5km, 10km, sin límite)
+- [x] Ordenar gimnasios por distancia automáticamente
+- [x] Componente DistanceFilter con interfaz intuitiva
+- [x] Hook useGeolocation reutilizable
+- [x] Manejo de errores (permiso denegado, ubicación no disponible)
 - [ ] Centrar mapa en ubicación del usuario
 - [ ] Mostrar marcador de ubicación actual en el mapa
-- [ ] Manejo de errores (permiso denegado, ubicación no disponible)
 
 **Estimación:** 1 día
+**Estado:** ✅ Completado (10 Nov 2025)
+**Archivos:** `src/hooks/useGeolocation.js`, `src/components/DistanceFilter.jsx`, `src/pages/usuario/ExploreGyms.jsx`
 
 ---
 
@@ -340,8 +344,8 @@ Este documento organiza las funcionalidades pendientes para completar el MVP y l
 
 ### Semana 1-2: MVP Funcional
 - ✅ Backend con Supabase (COMPLETADO)
+- ✅ Geolocalización (COMPLETADO)
 - 🔄 Sistema de pagos con Stripe (PRÓXIMO)
-- ⏳ Geolocalización
 
 ### Semana 3: Core Features
 - Gestión de clases
