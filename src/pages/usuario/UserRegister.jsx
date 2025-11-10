@@ -5,6 +5,7 @@ import { Mail, Lock, User, Dumbbell, AlertCircle } from 'lucide-react'
 import { useAuth } from '../../contexts/AuthContext'
 import { supabase } from '../../lib/supabase'
 import Loader from '../../components/Loader'
+import TermsModal from '../../components/TermsModal'
 
 const UserRegister = () => {
   const navigate = useNavigate()
@@ -17,10 +18,17 @@ const UserRegister = () => {
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
+  const [termsAccepted, setTermsAccepted] = useState(false)
+  const [showTermsModal, setShowTermsModal] = useState(false)
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError(null)
+    
+    if (!termsAccepted) {
+      setError('Debes aceptar los términos y condiciones para continuar')
+      return
+    }
     
     if (formData.password !== formData.confirmPassword) {
       setError('Las contraseñas no coinciden')
@@ -182,23 +190,50 @@ const UserRegister = () => {
             )}
 
             {/* Terms */}
-            <div className="flex items-start space-x-2">
-              <input
-                type="checkbox"
-                id="terms"
-                className="mt-1"
-                required
-              />
-              <label htmlFor="terms" className="text-sm text-zinc-400">
-                Acepto los{' '}
-                <Link to="/terminos" className="text-primary hover:underline">
-                  términos y condiciones
-                </Link>
-                {' '}y la{' '}
-                <Link to="/privacidad" className="text-primary hover:underline">
-                  política de privacidad
-                </Link>
-              </label>
+            <div className="space-y-3">
+              <div className="flex items-start space-x-3">
+                <input
+                  type="checkbox"
+                  id="terms"
+                  checked={termsAccepted}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setShowTermsModal(true)
+                    } else {
+                      setTermsAccepted(false)
+                    }
+                  }}
+                  className="mt-1 w-4 h-4 rounded border-zinc-700 bg-zinc-800 text-primary focus:ring-primary focus:ring-offset-0"
+                />
+                <label htmlFor="terms" className="text-sm text-zinc-400 flex-1">
+                  He leído y acepto los{' '}
+                  <button
+                    type="button"
+                    onClick={() => setShowTermsModal(true)}
+                    className="text-primary hover:underline font-semibold"
+                  >
+                    Términos y Condiciones
+                  </button>
+                  {' '}de GymBro
+                </label>
+              </div>
+              
+              {termsAccepted && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="bg-green-500/10 border border-green-500/30 rounded-lg p-3 flex items-center space-x-2"
+                >
+                  <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
+                    <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <p className="text-sm text-green-500 font-medium">
+                    Términos aceptados correctamente
+                  </p>
+                </motion.div>
+              )}
             </div>
 
             {/* Submit Button */}
@@ -238,6 +273,14 @@ const UserRegister = () => {
             </p>
           </div>
         </div>
+
+        {/* Terms Modal */}
+        <TermsModal
+          isOpen={showTermsModal}
+          onClose={() => setShowTermsModal(false)}
+          onAccept={() => setTermsAccepted(true)}
+          type="user"
+        />
       </motion.div>
     </div>
   )

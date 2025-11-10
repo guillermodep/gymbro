@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Mail, Lock, Dumbbell, Building, MapPin, Phone, Image } from 'lucide-react'
+import { Mail, Lock, Dumbbell, Building, MapPin, Phone, Image, AlertCircle } from 'lucide-react'
+import TermsModal from '../../components/TermsModal'
 
 const GymRegister = () => {
   const navigate = useNavigate()
@@ -21,6 +22,9 @@ const GymRegister = () => {
     capacity: '',
     schedule: ''
   })
+  const [termsAccepted, setTermsAccepted] = useState(false)
+  const [showTermsModal, setShowTermsModal] = useState(false)
+  const [error, setError] = useState(null)
 
   const activities = ['CrossFit', 'Yoga', 'Spinning', 'Funcional', 'Pilates', 'Boxing', 'Zumba', 'MMA']
 
@@ -42,6 +46,26 @@ const GymRegister = () => {
 
   const handleNext = (e) => {
     e.preventDefault()
+    setError(null)
+    
+    // Validaciones del Step 1
+    if (step === 1) {
+      if (!termsAccepted) {
+        setError('Debes aceptar los términos y condiciones para continuar')
+        return
+      }
+      
+      if (formData.password !== formData.confirmPassword) {
+        setError('Las contraseñas no coinciden')
+        return
+      }
+      
+      if (formData.password.length < 8) {
+        setError('La contraseña debe tener al menos 8 caracteres')
+        return
+      }
+    }
+    
     if (step < 3) {
       setStep(step + 1)
     } else {
@@ -146,6 +170,61 @@ const GymRegister = () => {
                       required
                     />
                   </div>
+                </div>
+
+                {/* Error Message */}
+                {error && (
+                  <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4 flex items-start space-x-3">
+                    <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
+                    <p className="text-sm text-red-500">{error}</p>
+                  </div>
+                )}
+
+                {/* Terms */}
+                <div className="space-y-3">
+                  <div className="flex items-start space-x-3">
+                    <input
+                      type="checkbox"
+                      id="terms"
+                      checked={termsAccepted}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setShowTermsModal(true)
+                        } else {
+                          setTermsAccepted(false)
+                        }
+                      }}
+                      className="mt-1 w-4 h-4 rounded border-zinc-700 bg-zinc-800 text-primary focus:ring-primary focus:ring-offset-0"
+                    />
+                    <label htmlFor="terms" className="text-sm text-zinc-400 flex-1">
+                      He leído y acepto los{' '}
+                      <button
+                        type="button"
+                        onClick={() => setShowTermsModal(true)}
+                        className="text-primary hover:underline font-semibold"
+                      >
+                        Términos y Condiciones
+                      </button>
+                      {' '}para Gimnasios Afiliados
+                    </label>
+                  </div>
+                  
+                  {termsAccepted && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="bg-green-500/10 border border-green-500/30 rounded-lg p-3 flex items-center space-x-2"
+                    >
+                      <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
+                        <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                        </svg>
+                      </div>
+                      <p className="text-sm text-green-500 font-medium">
+                        Términos aceptados correctamente
+                      </p>
+                    </motion.div>
+                  )}
                 </div>
               </>
             )}
@@ -297,6 +376,14 @@ const GymRegister = () => {
             </div>
           )}
         </div>
+
+        {/* Terms Modal */}
+        <TermsModal
+          isOpen={showTermsModal}
+          onClose={() => setShowTermsModal(false)}
+          onAccept={() => setTermsAccepted(true)}
+          type="gym"
+        />
       </motion.div>
     </div>
   )
