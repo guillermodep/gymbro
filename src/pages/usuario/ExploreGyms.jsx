@@ -153,9 +153,11 @@ const ExploreGyms = () => {
                 <DistanceFilter
                   onLocationFound={handleLocationRequest}
                   onLocationCleared={handleLocationClear}
+                  onRadiusChange={setSelectedRadius}
                   loading={geoLoading}
                   error={geoError}
                   hasLocation={!!userLocation}
+                  selectedRadius={selectedRadius}
                 />
 
                 {/* Other Filters */}

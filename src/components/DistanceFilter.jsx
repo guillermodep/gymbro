@@ -2,8 +2,7 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { MapPin, Loader, AlertCircle, X } from 'lucide-react'
 
-const DistanceFilter = ({ onLocationFound, onLocationCleared, loading, error, hasLocation }) => {
-  const [selectedRadius, setSelectedRadius] = useState(null)
+const DistanceFilter = ({ onLocationFound, onLocationCleared, onRadiusChange, loading, error, hasLocation, selectedRadius }) => {
 
   const radiusOptions = [
     { label: '1 km', value: 1 },
@@ -17,8 +16,12 @@ const DistanceFilter = ({ onLocationFound, onLocationCleared, loading, error, ha
   }
 
   const handleClearLocation = () => {
-    setSelectedRadius(null)
+    onRadiusChange(null)
     onLocationCleared()
+  }
+
+  const handleRadiusChange = (radius) => {
+    onRadiusChange(radius)
   }
 
   return (
@@ -85,7 +88,7 @@ const DistanceFilter = ({ onLocationFound, onLocationCleared, loading, error, ha
               {radiusOptions.map((option) => (
                 <button
                   key={option.value ?? 'all'}
-                  onClick={() => setSelectedRadius(option.value)}
+                  onClick={() => handleRadiusChange(option.value)}
                   className={`py-2 px-3 rounded-lg text-sm font-medium transition-all ${
                     selectedRadius === option.value
                       ? 'bg-primary text-dark'
