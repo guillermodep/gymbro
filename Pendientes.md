@@ -20,6 +20,12 @@ Este documento organiza las funcionalidades pendientes para completar el MVP y l
 - ✅ Responsive y mobile-first
 - ✅ Animaciones con Framer Motion
 - ✅ Listo para deploy en Netlify
+- ✅ **Sistema de Términos y Condiciones:**
+  - Modal interactivo con scroll obligatorio
+  - Contratos legales B2C (usuarios) y B2B (gimnasios)
+  - Validación obligatoria en registro
+  - Feedback visual de aceptación
+  - Información legal completa (GYMBRO S.A.S, comisión 12%, jurisdicción Quito)
 
 ---
 
@@ -204,14 +210,20 @@ Este documento organiza las funcionalidades pendientes para completar el MVP y l
 ### 10. Términos Legales ⭐⭐
 **Prioridad: MEDIA** (importante antes de lanzar)
 
-- [ ] Términos y Condiciones
+- [x] Términos y Condiciones (B2C - Usuarios)
+- [x] Términos y Condiciones (B2B - Gimnasios)
+- [x] Modal interactivo de aceptación con scroll obligatorio
+- [x] Integración en registro de usuarios
+- [x] Integración en registro de gimnasios (Step 1)
+- [x] Validación obligatoria antes de continuar
+- [x] Contratos con información legal completa (GYMBRO S.A.S, comisión 12%, jurisdicción Quito)
 - [ ] Política de Privacidad
 - [ ] Política de Cookies
 - [ ] Aviso Legal
 - [ ] Modal de aceptación de cookies
-- [ ] Checkbox de aceptación en registro
 
 **Estimación:** 1 día (con ayuda de templates legales)
+**Estado:** ✅ Términos y Condiciones completados (10 Nov 2025)
 
 ---
 
@@ -343,7 +355,7 @@ Este documento organiza las funcionalidades pendientes para completar el MVP y l
 - **Prioridad ⭐⭐**: Importante pero no bloqueante
 - **Prioridad ⭐**: Nice to have
 
-**Última actualización:** 7 de Noviembre, 2025
+**Última actualización:** 10 de Noviembre, 2025
 
 ---
 
