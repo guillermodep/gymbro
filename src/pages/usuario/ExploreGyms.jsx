@@ -6,7 +6,9 @@ import Footer from '../../components/Footer'
 import GymCard from '../../components/GymCard'
 import MapView from '../../components/MapView'
 import Loader from '../../components/Loader'
+import DistanceFilter from '../../components/DistanceFilter'
 import { gymHelpers } from '../../lib/supabase'
+import { useGeolocation, filterGymsByDistance, sortGymsByDistance } from '../../hooks/useGeolocation'
 
 const ExploreGyms = () => {
   const [searchTerm, setSearchTerm] = useState('')
@@ -17,6 +19,10 @@ const ExploreGyms = () => {
   const [gyms, setGyms] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [selectedRadius, setSelectedRadius] = useState(null)
+  
+  // Geolocation hook
+  const { userLocation, loading: geoLoading, error: geoError, requestLocation, clearLocation } = useGeolocation()
 
   const cities = ['Quito', 'Guayaquil', 'Cuenca']
   const activities = ['CrossFit', 'Yoga', 'Spinning', 'Funcional', 'Pilates', 'Boxing']
@@ -51,6 +57,24 @@ const ExploreGyms = () => {
     
     return matchesSearch && matchesCity && matchesActivity
   })
+
+  // Aplicar filtro de distancia si está activo
+  let displayedGyms = filteredGyms
+  if (userLocation && selectedRadius !== null) {
+    displayedGyms = filterGymsByDistance(filteredGyms, userLocation, selectedRadius)
+  } else if (userLocation) {
+    // Ordenar por distancia si la ubicación está disponible pero sin filtro
+    displayedGyms = sortGymsByDistance(filteredGyms, userLocation)
+  }
+
+  const handleLocationRequest = () => {
+    requestLocation()
+  }
+
+  const handleLocationClear = () => {
+    setSelectedRadius(null)
+    clearLocation()
+  }
 
   return (
     <div className="min-h-screen bg-dark">
@@ -123,42 +147,54 @@ const ExploreGyms = () => {
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
-                className="card"
+                className="space-y-4"
               >
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {/* City Filter */}
-                  <div>
-                    <label className="block text-sm font-semibold text-light mb-2">
-                      <MapPin className="w-4 h-4 inline mr-2" />
-                      Ciudad
-                    </label>
-                    <select
-                      value={selectedCity}
-                      onChange={(e) => setSelectedCity(e.target.value)}
-                      className="input-field"
-                    >
-                      <option value="all">Todas las ciudades</option>
-                      {cities.map(city => (
-                        <option key={city} value={city}>{city}</option>
-                      ))}
-                    </select>
-                  </div>
+                {/* Distance Filter */}
+                <DistanceFilter
+                  onLocationFound={handleLocationRequest}
+                  onLocationCleared={handleLocationClear}
+                  loading={geoLoading}
+                  error={geoError}
+                  hasLocation={!!userLocation}
+                />
 
-                  {/* Activity Filter */}
-                  <div>
-                    <label className="block text-sm font-semibold text-light mb-2">
-                      Tipo de Actividad
-                    </label>
-                    <select
-                      value={selectedActivity}
-                      onChange={(e) => setSelectedActivity(e.target.value)}
-                      className="input-field"
-                    >
-                      <option value="all">Todas las actividades</option>
-                      {activities.map(activity => (
-                        <option key={activity} value={activity}>{activity}</option>
-                      ))}
-                    </select>
+                {/* Other Filters */}
+                <div className="card">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {/* City Filter */}
+                    <div>
+                      <label className="block text-sm font-semibold text-light mb-2">
+                        <MapPin className="w-4 h-4 inline mr-2" />
+                        Ciudad
+                      </label>
+                      <select
+                        value={selectedCity}
+                        onChange={(e) => setSelectedCity(e.target.value)}
+                        className="input-field"
+                      >
+                        <option value="all">Todas las ciudades</option>
+                        {cities.map(city => (
+                          <option key={city} value={city}>{city}</option>
+                        ))}
+                      </select>
+                    </div>
+
+                    {/* Activity Filter */}
+                    <div>
+                      <label className="block text-sm font-semibold text-light mb-2">
+                        Tipo de Actividad
+                      </label>
+                      <select
+                        value={selectedActivity}
+                        onChange={(e) => setSelectedActivity(e.target.value)}
+                        className="input-field"
+                      >
+                        <option value="all">Todas las actividades</option>
+                        {activities.map(activity => (
+                          <option key={activity} value={activity}>{activity}</option>
+                        ))}
+                      </select>
+                    </div>
                   </div>
                 </div>
               </motion.div>
@@ -192,10 +228,16 @@ const ExploreGyms = () => {
 
           {/* Results Count */}
           {!loading && !error && (
-            <div className="mb-6">
+            <div className="mb-6 flex items-center justify-between">
               <p className="text-zinc-400">
-                {filteredGyms.length} {filteredGyms.length === 1 ? 'gimnasio encontrado' : 'gimnasios encontrados'}
+                {displayedGyms.length} {displayedGyms.length === 1 ? 'gimnasio encontrado' : 'gimnasios encontrados'}
               </p>
+              {userLocation && (
+                <p className="text-sm text-primary flex items-center space-x-1">
+                  <MapPin className="w-4 h-4" />
+                  <span>Ordenado por distancia</span>
+                </p>
+              )}
             </div>
           )}
 
@@ -204,16 +246,16 @@ const ExploreGyms = () => {
             <>
               {viewMode === 'grid' ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                  {filteredGyms.map((gym) => (
-                    <GymCard key={gym.id} gym={gym} />
+                  {displayedGyms.map((gym) => (
+                    <GymCard key={gym.id} gym={gym} distance={gym.distance} />
                   ))}
                 </div>
               ) : (
-                <MapView gyms={filteredGyms} />
+                <MapView gyms={displayedGyms} userLocation={userLocation} />
               )}
 
               {/* No Results */}
-              {filteredGyms.length === 0 && (
+              {displayedGyms.length === 0 && (
                 <div className="text-center py-20">
                   <Search className="w-16 h-16 text-zinc-600 mx-auto mb-4" />
                   <h3 className="text-2xl font-montserrat font-bold mb-2">
