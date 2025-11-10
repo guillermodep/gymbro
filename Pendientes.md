@@ -26,6 +26,12 @@ Este documento organiza las funcionalidades pendientes para completar el MVP y l
   - Validación obligatoria en registro
   - Feedback visual de aceptación
   - Información legal completa (GYMBRO S.A.S, comisión 12%, jurisdicción Quito)
+- ✅ **Backend Base con Supabase:**
+  - Esquema de base de datos completo (usuarios, gimnasios, reservas, membresías, reviews, clases)
+  - Autenticación con roles B2C/B2B
+  - Políticas de Row Level Security (RLS) para todas las tablas
+  - Triggers y funciones SQL para automatización
+  - Scripts de seed para datos iniciales
 
 ---
 
@@ -34,22 +40,26 @@ Este documento organiza las funcionalidades pendientes para completar el MVP y l
 ### 1. Backend con Supabase ⭐⭐⭐
 **Prioridad: ALTA**
 
-- [ ] Configurar proyecto en Supabase
-- [ ] Crear esquema de base de datos:
-  - Tabla `users` (usuarios B2C)
-  - Tabla `gyms` (gimnasios B2B)
-  - Tabla `bookings` (reservas)
-  - Tabla `memberships` (GymBro Pass)
-  - Tabla `reviews` (calificaciones)
-- [ ] Configurar autenticación:
-  - Email/Password
-  - OAuth (Google, Facebook)
-  - Separar roles B2C/B2B
-- [ ] Migrar mock data a Supabase
-- [ ] Implementar queries y mutations
+- [x] Configurar proyecto en Supabase
+- [x] Crear esquema de base de datos (`schema.sql`):
+  - [x] Tabla `users` (extiende auth.users)
+  - [x] Tabla `gyms`
+  - [x] Tabla `bookings`
+  - [x] Tabla `memberships`
+  - [x] Tabla `reviews`
+  - [x] Tabla `classes`
+- [x] Configurar autenticación:
+  - [x] Email/Password (confirmación deshabilitada para dev)
+  - [x] Roles B2C/B2B definidos
+- [x] Políticas de Row Level Security (RLS) implementadas
+- [x] Triggers y funciones SQL para timestamps y ratings
+- [x] Scripts de seed para datos iniciales
+- [ ] OAuth (Google, Facebook)
+- [ ] Implementar queries y mutations en frontend
 - [ ] Manejo de estados de carga y errores
 
 **Estimación:** 2-3 días
+**Estado:** ✅ Completado (10 Nov 2025)
 
 ---
 
@@ -224,6 +234,7 @@ Este documento organiza las funcionalidades pendientes para completar el MVP y l
 
 **Estimación:** 1 día (con ayuda de templates legales)
 **Estado:** ✅ Términos y Condiciones completados (10 Nov 2025)
+**Archivos:** `/public/contracts/user_contract.md`, `/public/contracts/gym_contract.md`, `src/components/TermsModal.jsx`
 
 ---
 
@@ -328,9 +339,9 @@ Este documento organiza las funcionalidades pendientes para completar el MVP y l
 ## 🎯 **ROADMAP SUGERIDO**
 
 ### Semana 1-2: MVP Funcional
-- Backend con Supabase
-- Sistema de pagos con Stripe
-- Geolocalización
+- ✅ Backend con Supabase (COMPLETADO)
+- 🔄 Sistema de pagos con Stripe (PRÓXIMO)
+- ⏳ Geolocalización
 
 ### Semana 3: Core Features
 - Gestión de clases
@@ -355,7 +366,7 @@ Este documento organiza las funcionalidades pendientes para completar el MVP y l
 - **Prioridad ⭐⭐**: Importante pero no bloqueante
 - **Prioridad ⭐**: Nice to have
 
-**Última actualización:** 10 de Noviembre, 2025
+**Última actualización:** 10 de Noviembre, 2025 (14:37 UTC-5)
 
 ---
 
